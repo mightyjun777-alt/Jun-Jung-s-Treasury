@@ -64,6 +64,23 @@
   .section-title{font-size:17px;font-weight:800;margin:0;}
   .section-hint{font-size:11.5px;color:var(--sub);margin:-8px 0 14px;}
 
+  .reset-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .reset-btn{
+    padding:7px 14px;background:#fff;color:var(--loss);border:1px solid var(--loss);border-radius:4px;
+    font-size:12px;font-weight:700;cursor:pointer;
+  }
+  .reset-btn:hover{background:var(--loss);color:#fff;}
+  .reset-hint{font-size:11px;color:var(--sub);}
+
+  .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:2px;}
+  @media(max-width:640px){.category-grid{grid-template-columns:1fr;}}
+  .category-card{border:1px solid var(--line);border-radius:4px;padding:12px 14px;}
+  .category-name{font-size:12.5px;font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;}
+  .category-count{font-size:11px;color:var(--sub);font-weight:500;}
+  .category-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .category-chip{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--bg-alt);color:var(--ink);border:1px solid var(--line);}
+  .listing-tag{font-size:10px;color:var(--sub);font-weight:400;margin-top:2px;white-space:nowrap;}
+
   /* Markets table */
   .ticker-table{width:100%;border-collapse:collapse;font-size:13px;}
   .ticker-table th{text-align:left;font-weight:700;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:var(--sub);padding:8px 10px;border-bottom:1px solid var(--line);background:var(--bg-alt);}
@@ -121,6 +138,22 @@
     font-size:13px;font-weight:700;cursor:pointer;
   }
   .add-form-row button:hover{background:var(--orange-dark);}
+  .add-form-hint{margin-top:8px;font-size:11px;color:var(--sub);}
+
+  .add-search-wrap{position:relative;flex:2;min-width:180px;}
+  .add-search-wrap input{width:100%;}
+  .add-suggest{
+    display:none;position:absolute;top:100%;left:0;right:0;z-index:20;
+    background:#fff;border:1px solid var(--line);border-top:none;border-radius:0 0 4px 4px;
+    max-height:220px;overflow-y:auto;box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  }
+  .add-suggest.open{display:block;}
+  .add-suggest-item{padding:9px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--line);}
+  .add-suggest-item:last-child{border-bottom:none;}
+  .add-suggest-item:hover{background:#FFF4EB;}
+  .add-suggest-sym{font-weight:700;color:var(--orange-dark);margin-right:6px;}
+  .add-suggest-name{color:var(--sub);}
+  .add-suggest-empty{padding:9px 12px;font-size:12.5px;color:var(--sub);}
 
   /* Value bar */
   .value-bar{
@@ -275,8 +308,8 @@
         <tr data-sym="SILVER" data-name="은(Silver)" data-price="$38.90" data-change="-1.2%" data-up="0"><td>은 (Silver)</td><td class="clickable-val">$38.90</td><td class="down">-1.2%</td></tr>
         <tr data-sym="NATGAS" data-name="천연가스" data-price="$3.28" data-change="-2.4%" data-up="0"><td>천연가스</td><td class="clickable-val">$3.28</td><td class="down">-2.4%</td></tr>
         <tr data-sym="COPPER" data-name="구리" data-price="$4.62" data-change="+1.1%" data-up="1"><td>구리</td><td class="clickable-val">$4.62</td><td class="up">+1.1%</td></tr>
-        <tr data-sym="BTC" data-name="비트코인" data-price="$118,240" data-change="+1.8%" data-up="1"><td>비트코인</td><td class="clickable-val">$118,240</td><td class="up">+1.8%</td></tr>
-        <tr data-sym="ETH" data-name="이더리움" data-price="$4,120" data-change="+2.3%" data-up="1"><td>이더리움</td><td class="clickable-val">$4,120</td><td class="up">+2.3%</td></tr>
+        <tr data-sym="BTC" data-name="비트코인" data-price="$63,327" data-change="-1.1%" data-up="0"><td>비트코인</td><td class="clickable-val">$63,327</td><td class="down">-1.1%</td></tr>
+        <tr data-sym="ETH" data-name="이더리움" data-price="$1,878" data-change="-3.2%" data-up="0"><td>이더리움</td><td class="clickable-val">$1,878</td><td class="down">-3.2%</td></tr>
       </tbody>
     </table>
   </div>
@@ -285,12 +318,9 @@
   <div class="section">
     <div class="section-head"><span class="section-num">03</span><h2 class="section-title">보유 종목</h2></div>
     <div class="section-hint">보유종목 전체 · 가격을 클릭하면 그래프, ✕를 클릭하면 삭제, 아래에서 종목 추가 (주식·코인 모두 가능)</div>
-
-    <div class="value-bar" id="value-bar">
-      <div class="refresh-wrap">
-        <button class="refresh-btn" id="refresh-btn">시세 새로고침</button>
-        <span class="refresh-status" id="refresh-status"></span>
-      </div>
+    <div class="reset-wrap">
+      <button class="reset-btn" id="reset-btn">최신 가격으로 업데이트</button>
+      <span class="reset-hint">보유 종목 목록은 그대로 두고, 알려진 종목의 가격만 최신 값으로 갱신해요</span>
     </div>
 
     <table class="full-table" id="full-holdings">
@@ -298,14 +328,22 @@
       <tbody id="full-holdings-body"></tbody>
     </table>
 
+    <div class="week-label" style="margin-top:22px;">카테고리별 분류</div>
+    <div class="category-grid" id="category-grid"></div>
+
     <div class="add-form" id="add-form">
-      <div class="add-form-label">+ 종목 추가 (주식 티커 또는 BTC/ETH 등 코인)</div>
+      <div class="add-form-label">+ 종목 추가 (회사명 또는 티커로 검색)</div>
       <div class="add-form-row">
-        <input type="text" id="add-sym" placeholder="티커 (예: AAPL, BTC)" maxlength="10">
-        <input type="text" id="add-name" placeholder="종목명 (선택)">
+        <div class="add-search-wrap">
+          <input type="text" id="add-search" placeholder="회사명 또는 티커 입력 (예: Apple, AAPL)" autocomplete="off">
+          <div class="add-suggest" id="add-suggest"></div>
+        </div>
+        <input type="text" id="add-sym" placeholder="티커 (자동입력 또는 직접입력)" maxlength="10">
+        <input type="hidden" id="add-name">
         <input type="number" id="add-price" placeholder="현재가($)" min="0" step="any">
         <button id="add-btn">추가</button>
       </div>
+      <div class="add-form-hint" id="add-form-hint">회사명을 입력하면 후보가 뜨고, 선택하면 티커·가격이 채워져요 (자주 검색되는 종목 기준 최근 가격). 목록에 없으면 티커·가격을 직접 입력하세요.</div>
     </div>
 
     <div class="week-label" style="margin-top:26px;">종목별 브리핑</div>
@@ -422,30 +460,30 @@
     VOO: "S&P500을 추종하는 저비용 코어 ETF — 포트폴리오의 안정적인 중심축 역할. 개별 종목 리스크 없이 미국 대형주 전반에 분산 투자하는 자산.",
   };
   const defaultHoldings = [
-    {sym:"COHR", name:"Coherent Corp.", price:96.10},
-    {sym:"CRM", name:"Salesforce", price:258.90},
-    {sym:"DECK", name:"Deckers Brands", price:118.40},
-    {sym:"GLW", name:"Corning", price:52.30},
-    {sym:"IONQ", name:"IonQ", price:41.20},
-    {sym:"NOW", name:"ServiceNow", price:1024.10},
-    {sym:"NVO", name:"Novo Nordisk", price:68.50},
-    {sym:"PL", name:"Planet Labs", price:9.85},
-    {sym:"RDDT", name:"Reddit", price:147.30},
-    {sym:"ZETA", name:"Zeta Global", price:16.90},
-    {sym:"AMZN", name:"Amazon", price:232.10},
-    {sym:"ASML", name:"ASML Holding", price:1140.00},
-    {sym:"IREN", name:"IREN Ltd.", price:14.60},
-    {sym:"JEPQ", name:"JPMorgan Nasdaq Premium", price:54.20},
-    {sym:"META", name:"Meta Platforms", price:712.40},
-    {sym:"MRVL", name:"Marvell Technology", price:74.80},
-    {sym:"MU", name:"Micron Technology", price:118.90},
-    {sym:"PGY", name:"Pagaya Technologies", price:28.40},
-    {sym:"SEZL", name:"Sezzle", price:112.60},
-    {sym:"TEM", name:"Tempus AI", price:62.85},
-    {sym:"TSLA", name:"Tesla", price:412.70},
-    {sym:"COPX", name:"Global X Copper Miners ETF", price:44.10},
-    {sym:"SLV", name:"iShares Silver Trust", price:31.20},
-    {sym:"VOO", name:"Vanguard S&P 500 ETF", price:598.40},
+    {sym:"COHR", name:"Coherent Corp.", price:368.65},
+    {sym:"CRM", name:"Salesforce", price:183.00},
+    {sym:"DECK", name:"Deckers Brands", price:101.43},
+    {sym:"GLW", name:"Corning", price:220.00},
+    {sym:"IONQ", name:"IonQ", price:33.94},
+    {sym:"NOW", name:"ServiceNow", price:110.63},
+    {sym:"NVO", name:"Novo Nordisk", price:48.77},
+    {sym:"PL", name:"Planet Labs", price:30.86},
+    {sym:"RDDT", name:"Reddit", price:163.80},
+    {sym:"ZETA", name:"Zeta Global", price:19.13},
+    {sym:"AMZN", name:"Amazon", price:231.60},
+    {sym:"ASML", name:"ASML Holding", price:1580.33},
+    {sym:"IREN", name:"IREN Ltd.", price:41.28},
+    {sym:"JEPQ", name:"JPMorgan Nasdaq Premium", price:57.74},
+    {sym:"META", name:"Meta Platforms", price:597.60},
+    {sym:"MRVL", name:"Marvell Technology", price:194.20},
+    {sym:"MU", name:"Micron Technology", price:900.20},
+    {sym:"PGY", name:"Pagaya Technologies", price:17.24},
+    {sym:"SEZL", name:"Sezzle", price:174.28},
+    {sym:"TEM", name:"Tempus AI", price:45.53},
+    {sym:"TSLA", name:"Tesla", price:308.70},
+    {sym:"COPX", name:"Global X Copper Miners ETF", price:77.72},
+    {sym:"SLV", name:"iShares Silver Trust", price:51.70},
+    {sym:"VOO", name:"Vanguard S&P 500 ETF", price:679.31},
   ];
 
   const STORAGE_KEY = 'juns-treasury-holdings';
@@ -467,6 +505,82 @@
 
   function fmtUSD(n){ return '$' + n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
 
+  // ---- Sector / category classification ----
+  const sectorMap = {
+    COHR:"AI·반도체·기술인프라", GLW:"AI·반도체·기술인프라", IONQ:"AI·반도체·기술인프라",
+    ASML:"AI·반도체·기술인프라", IREN:"AI·반도체·기술인프라", MRVL:"AI·반도체·기술인프라", MU:"AI·반도체·기술인프라",
+    NOW:"소프트웨어·플랫폼", CRM:"소프트웨어·플랫폼", ZETA:"소프트웨어·플랫폼",
+    RDDT:"커뮤니케이션·미디어", META:"커뮤니케이션·미디어",
+    AMZN:"빅테크·이커머스",
+    TSLA:"자동차·소비재", DECK:"자동차·소비재",
+    NVO:"헬스케어", TEM:"헬스케어",
+    PGY:"금융·핀테크", SEZL:"금융·핀테크",
+    PL:"우주·위성",
+    COPX:"원자재·실물자산", SLV:"원자재·실물자산", GOLD:"원자재·실물자산",
+    JEPQ:"방어·인컴 자산(ETF)", VOO:"방어·인컴 자산(ETF)",
+    BTC:"가상자산", ETH:"가상자산",
+    AAPL:"빅테크·이커머스",
+  };
+  const CATEGORY_ORDER = [
+    "AI·반도체·기술인프라","소프트웨어·플랫폼","커뮤니케이션·미디어","빅테크·이커머스",
+    "자동차·소비재","헬스케어","금융·핀테크","우주·위성","원자재·실물자산","방어·인컴 자산(ETF)","가상자산","미분류"
+  ];
+
+  const categoryGrid = document.getElementById('category-grid');
+  function renderCategories(){
+    const buckets = {};
+    holdings.forEach(h => {
+      const cat = sectorMap[h.sym] || "미분류";
+      if(!buckets[cat]) buckets[cat] = [];
+      buckets[cat].push(h.sym);
+    });
+    categoryGrid.innerHTML = CATEGORY_ORDER
+      .filter(cat => buckets[cat] && buckets[cat].length > 0)
+      .map(cat => `
+        <div class="category-card">
+          <div class="category-name">${cat}<span class="category-count">${buckets[cat].length}개</span></div>
+          <div class="category-chips">${buckets[cat].map(s => `<span class="category-chip">${s}</span>`).join('')}</div>
+        </div>
+      `).join('');
+  }
+
+  // ---- Exchange / index membership ----
+  const listingMap = {
+    COHR:{exch:"NYSE", idx:["S&P500"]},
+    CRM:{exch:"NYSE", idx:["S&P500","다우존스"]},
+    DECK:{exch:"NYSE", idx:["S&P500"]},
+    GLW:{exch:"NYSE", idx:["S&P500"]},
+    IONQ:{exch:"NYSE", idx:["러셀2000"]},
+    NOW:{exch:"NYSE", idx:["S&P500"]},
+    NVO:{exch:"NYSE", idx:[]},
+    PL:{exch:"NYSE", idx:["러셀2000"]},
+    RDDT:{exch:"NYSE", idx:["러셀1000"]},
+    ZETA:{exch:"NYSE", idx:["러셀2000"]},
+    AMZN:{exch:"나스닥", idx:["S&P500","나스닥100","다우존스"]},
+    ASML:{exch:"나스닥", idx:["나스닥100"]},
+    IREN:{exch:"나스닥", idx:["러셀2000"]},
+    JEPQ:{exch:"나스닥", idx:["ETF"]},
+    META:{exch:"나스닥", idx:["S&P500","나스닥100"]},
+    MRVL:{exch:"나스닥", idx:["S&P500","나스닥100"]},
+    MU:{exch:"나스닥", idx:["S&P500","나스닥100"]},
+    PGY:{exch:"나스닥", idx:["러셀2000"]},
+    SEZL:{exch:"나스닥", idx:["러셀2000"]},
+    TEM:{exch:"나스닥", idx:["러셀2000"]},
+    TSLA:{exch:"나스닥", idx:["S&P500","나스닥100"]},
+    COPX:{exch:"NYSE Arca", idx:["ETF"]},
+    SLV:{exch:"NYSE Arca", idx:["ETF"]},
+    VOO:{exch:"NYSE Arca", idx:["ETF"]},
+    AAPL:{exch:"나스닥", idx:["S&P500","나스닥100","다우존스"]},
+    BTC:{exch:"암호화폐", idx:[]},
+    ETH:{exch:"암호화폐", idx:[]},
+  };
+  function listingTag(sym){
+    const info = listingMap[sym];
+    if(!info) return '';
+    const parts = [info.exch, ...info.idx];
+    return `<div class="listing-tag">${parts.join(' · ')}</div>`;
+  }
+
   const fhBody = document.getElementById('full-holdings-body');
   const gridEl = document.getElementById('holdings-grid');
 
@@ -481,7 +595,7 @@
 
       // table row
       const tr = document.createElement('tr');
-      tr.innerHTML = `<td class="tkr clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${h.sym}</td>
+      tr.innerHTML = `<td class="tkr clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${h.sym}${listingTag(h.sym)}</td>
         <td>${h.name}</td>
         <td class="clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}${priceTag}</td>
         <td class="del-cell"><span class="del-btn" data-remove="${h.sym}">✕</span></td>`;
@@ -493,7 +607,7 @@
       card.innerHTML = `
         <span class="del-btn" data-remove="${h.sym}">✕</span>
         <div class="holding-top">
-          <div><div class="holding-ticker">${h.sym}</div><div class="holding-name">${h.name}</div></div>
+          <div><div class="holding-ticker">${h.sym}</div><div class="holding-name">${h.name}</div>${listingTag(h.sym)}</div>
           <div><div class="holding-price" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}</div>
             <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div></div>
         </div>
@@ -501,45 +615,126 @@
       `;
       gridEl.appendChild(card);
     });
+
+    renderCategories();
   }
   renderHoldings();
 
-  // ---- Live price refresh (best-effort; may be blocked by CORS depending on host) ----
-  function yahooSymbol(sym){
-    const map = {BTC:'BTC-USD', ETH:'ETH-USD'};
-    return map[sym] || sym;
-  }
-  async function fetchLivePrice(sym){
-    const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(yahooSymbol(sym));
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('fetch failed: ' + res.status);
-    const data = await res.json();
-    const meta = data.chart.result[0].meta;
-    return { price: meta.regularMarketPrice, live: meta.marketState === 'REGULAR' };
-  }
-  async function refreshPrices(){
-    const btn = document.getElementById('refresh-btn');
-    const status = document.getElementById('refresh-status');
-    btn.disabled = true; status.textContent = '조회 중…';
-    let ok = 0, fail = 0;
-    for(const h of holdings){
-      try{
-        const { price, live } = await fetchLivePrice(h.sym);
-        h.price = price;
-        h.priceKind = live ? 'live' : 'close';
-        ok++;
-      } catch(e){ fail++; }
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if(!window.confirm('현재 보유 종목 목록은 그대로 두고, 알려진 종목의 가격만 최신 값으로 업데이트합니다. 계속할까요?')) return;
+    // Build a symbol -> latest price lookup from both the default holdings list and the search dictionary
+    const priceBySymbol = {};
+    defaultHoldings.forEach(h => { priceBySymbol[h.sym] = h.price; });
+    for(const key in nameToSymbol){
+      const [symbol, , price] = nameToSymbol[key];
+      priceBySymbol[symbol] = price;
     }
-    try{
-      const fx = await fetchLivePrice('USDKRW=X').catch(()=>null);
-      if(fx && fx.price) fxRate = fx.price;
-    } catch(e){}
+    let updated = 0, skipped = 0;
+    holdings.forEach(h => {
+      if(priceBySymbol.hasOwnProperty(h.sym)){
+        h.price = priceBySymbol[h.sym];
+        updated++;
+      } else {
+        skipped++;
+      }
+    });
     saveHoldings();
     renderHoldings();
-    btn.disabled = false;
-    status.textContent = fail === 0 ? `${ok}개 종목 갱신 완료` : `${ok}개 성공 · ${fail}개 실패 (브라우저 API 제한 가능)`;
+    if(skipped > 0){
+      alert(`${updated}개 종목 가격을 업데이트했어요. ${skipped}개 종목은 최신 데이터가 없어 기존 가격을 유지했어요.`);
+    }
+  });
+
+  // ---- Company name / ticker autocomplete (static prices — updated periodically) ----
+  const nameToSymbol = {
+    "apple":["AAPL","Apple Inc.",340.08],
+    "coherent":["COHR","Coherent Corp.",368.65],
+    "salesforce":["CRM","Salesforce Inc.",183.00],
+    "deckers":["DECK","Deckers Brands",101.43],
+    "corning":["GLW","Corning Inc.",220.00],
+    "ionq":["IONQ","IonQ Inc.",33.94],
+    "servicenow":["NOW","ServiceNow Inc.",110.63],
+    "novo nordisk":["NVO","Novo Nordisk A/S",48.77],
+    "planet labs":["PL","Planet Labs PBC",30.86],
+    "reddit":["RDDT","Reddit Inc.",163.80],
+    "zeta global":["ZETA","Zeta Global Holdings",19.13],
+    "amazon":["AMZN","Amazon.com Inc.",231.60],
+    "asml":["ASML","ASML Holding N.V.",1580.33],
+    "iren":["IREN","IREN Ltd.",41.28],
+    "meta":["META","Meta Platforms Inc.",597.60],
+    "facebook":["META","Meta Platforms Inc.",597.60],
+    "marvell":["MRVL","Marvell Technology Inc.",194.20],
+    "micron":["MU","Micron Technology Inc.",900.20],
+    "pagaya":["PGY","Pagaya Technologies Ltd.",17.24],
+    "sezzle":["SEZL","Sezzle Inc.",174.28],
+    "tempus":["TEM","Tempus AI Inc.",45.53],
+    "tesla":["TSLA","Tesla Inc.",308.70],
+    "bitcoin":["BTC","비트코인",63327],
+    "ethereum":["ETH","이더리움",1878],
+  };
+
+  const addSearch = document.getElementById('add-search');
+  const addSuggest = document.getElementById('add-suggest');
+  const addSymInput = document.getElementById('add-sym');
+  const addNameInput = document.getElementById('add-name');
+  const addPriceInput = document.getElementById('add-price');
+
+  function localMatches(query){
+    const q = query.toLowerCase();
+    const results = [];
+    for(const key in nameToSymbol){
+      if(key.includes(q)){
+        const [symbol, name, price] = nameToSymbol[key];
+        results.push({ symbol, name, price });
+      }
+    }
+    return results.slice(0, 6);
   }
-  document.getElementById('refresh-btn').addEventListener('click', refreshPrices);
+
+  function renderSuggestions(items){
+    if(!items || items.length === 0){
+      addSuggest.innerHTML = '<div class="add-suggest-empty">일치하는 종목이 없어요 — 티커·가격을 직접 입력해보세요.</div>';
+      addSuggest.classList.add('open');
+      return;
+    }
+    addSuggest.innerHTML = items.map(it =>
+      `<div class="add-suggest-item" data-symbol="${it.symbol}" data-name="${it.name.replace(/"/g,'&quot;')}" data-price="${it.price}">
+        <span class="add-suggest-sym">${it.symbol}</span><span class="add-suggest-name">${it.name}</span>
+      </div>`
+    ).join('');
+    addSuggest.classList.add('open');
+  }
+
+  function selectSuggestion(symbol, name, price){
+    addSearch.value = name;
+    addSymInput.value = symbol;
+    addNameInput.value = name;
+    addPriceInput.value = price;
+    addSuggest.classList.remove('open');
+  }
+
+  addSearch.addEventListener('input', () => {
+    const query = addSearch.value.trim();
+    addSymInput.value = '';
+    addNameInput.value = '';
+    if(query.length < 2){ addSuggest.classList.remove('open'); return; }
+    renderSuggestions(localMatches(query));
+  });
+
+  addSuggest.addEventListener('click', (e) => {
+    const item = e.target.closest('.add-suggest-item');
+    if(!item) return;
+    selectSuggestion(item.getAttribute('data-symbol'), item.getAttribute('data-name'), item.getAttribute('data-price'));
+  });
+
+  document.addEventListener('click', (e) => {
+    if(!e.target.closest('.add-search-wrap')) addSuggest.classList.remove('open');
+  });
+
+  // Manual ticker typed directly into add-sym also works without autocomplete
+  addSymInput.addEventListener('input', () => {
+    addSymInput.value = addSymInput.value.toUpperCase();
+  });
 
   // Add form
   document.getElementById('add-btn').addEventListener('click', () => {
@@ -551,9 +746,11 @@
     holdings.push({sym, name, price});
     saveHoldings();
     renderHoldings();
+    document.getElementById('add-search').value = '';
     document.getElementById('add-sym').value = '';
     document.getElementById('add-name').value = '';
     document.getElementById('add-price').value = '';
+    addPriceInput.placeholder = '현재가($)';
   });
 
   // Remove (event delegation, since rows/cards are re-rendered)
@@ -561,6 +758,9 @@
     const rm = e.target.closest('[data-remove]');
     if(rm){
       const sym = rm.getAttribute('data-remove');
+      const target = holdings.find(h => h.sym === sym);
+      const label = target ? `${target.name} (${sym})` : sym;
+      if(!window.confirm(`${label}을(를) 정말 삭제하시겠습니까?`)) return;
       holdings = holdings.filter(h => h.sym !== sym);
       saveHoldings();
       renderHoldings();
