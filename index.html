@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jun's Treasury — 포트폴리오 브리핑</title>
+<style>
+  :root{
+    --bg:#FFFFFF;
+    --bg-alt:#F7F7F8;
+    --ink:#1A1A1A;
+    --sub:#5B6470;
+    --line:#E3E5E8;
+    --orange:#FF6A00;
+    --orange-dark:#D65A00;
+    --gain:#0E8A4B;
+    --loss:#D62E2E;
+    --navy:#0A0E14;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,'Malgun Gothic',sans-serif;}
+  body{padding-bottom:60px;}
+  table{font-variant-numeric:tabular-nums;}
+
+  .topbar{background:var(--navy);color:#fff;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;}
+  .topbar-brand{font-weight:800;font-size:15px;letter-spacing:-0.01em;}
+  .topbar-brand span{color:var(--orange);}
+  .topbar-meta{font-size:11.5px;color:#9BA3AF;}
+
+  .masthead{max-width:980px;margin:0 auto;padding:26px 24px 18px;border-bottom:1px solid var(--line);}
+  .masthead-title{font-size:24px;font-weight:800;letter-spacing:-0.01em;}
+  .masthead-sub{margin-top:6px;font-size:13.5px;color:var(--sub);}
+
+  /* Calendar strip */
+  .calendar-wrap{max-width:980px;margin:0 auto;padding:18px 24px 0;}
+  .calendar-label{font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--sub);margin-bottom:10px;}
+  .cal-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;}
+  .cal-item{flex:0 0 auto;min-width:150px;cursor:pointer;background:var(--bg-alt);border:1px solid var(--line);border-radius:4px;padding:10px 12px;transition:border-color .12s, background .12s;}
+  .cal-item:hover{border-color:var(--orange);background:#FFF4EB;}
+  .cal-item.selected{border-color:var(--orange);background:#FFF4EB;box-shadow:inset 0 0 0 1px var(--orange);}
+  .cal-item.today{border-left:3px solid var(--orange);}
+  .cal-date{font-size:11.5px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+  .cal-desc{font-size:12px;line-height:1.4;color:var(--sub);}
+  .cal-tag{display:inline-block;margin-top:6px;font-size:9.5px;font-weight:700;letter-spacing:0.03em;padding:2px 6px;border-radius:3px;color:#fff;background:#8B93A0;}
+  .cal-tag.fomc{background:var(--orange);}
+  .cal-tag.holding{background:var(--gain);}
+  .cal-tag.past{background:#9BA3AF;}
+
+  .cal-detail{max-width:980px;margin:10px auto 0;padding:16px 20px;background:#FFF9F4;border:1px solid #FFD9B3;border-radius:4px;display:none;font-size:13.5px;line-height:1.7;color:var(--ink);}
+  .cal-detail.open{display:block;}
+  .cal-detail-title{font-weight:700;font-size:14.5px;margin-bottom:6px;}
+  .cal-detail-close{float:right;cursor:pointer;color:var(--sub);font-size:12px;}
+
+  .quote-box{max-width:980px;margin:20px auto 0;padding:18px 22px;background:var(--bg-alt);border-left:4px solid var(--orange);}
+  .quote-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange-dark);margin-bottom:6px;}
+  .quote-text{font-size:15px;line-height:1.6;}
+  .quote-attr{margin-top:8px;font-size:11.5px;color:var(--sub);}
+
+  .section{max-width:980px;margin:0 auto;padding:30px 24px 0;}
+  .section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;border-bottom:2px solid var(--ink);padding-bottom:8px;}
+  .section-num{font-size:11px;font-weight:700;color:var(--orange);}
+  .section-title{font-size:17px;font-weight:800;margin:0;}
+  .section-hint{font-size:11.5px;color:var(--sub);margin:-8px 0 14px;}
+
+  /* Markets table */
+  .ticker-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .ticker-table th{text-align:left;font-weight:700;font-size:11px;letter-spacing:0.04em;text-transform:uppercase;color:var(--sub);padding:8px 10px;border-bottom:1px solid var(--line);background:var(--bg-alt);}
+  .ticker-table td{padding:10px;border-bottom:1px solid var(--line);}
+  .ticker-table tbody tr{cursor:pointer;transition:background .1s;}
+  .ticker-table tbody tr:hover{background:#FFF4EB;}
+  .up{color:var(--gain);font-weight:600;}
+  .down{color:var(--loss);font-weight:600;}
+  .clickable-val{text-decoration:underline;text-decoration-style:dotted;text-decoration-color:#B7BEC7;text-underline-offset:3px;}
+
+  .macro-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+  @media(max-width:640px){.macro-grid{grid-template-columns:1fr;}}
+  .macro-card{background:var(--bg-alt);border:1px solid var(--line);border-radius:4px;padding:14px 16px;}
+  .macro-card-label{font-size:11px;font-weight:700;color:var(--sub);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.03em;}
+  .macro-card-body{font-size:13.5px;line-height:1.6;}
+
+  .week-label{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
+  .timeline{border-left:2px solid var(--line);padding-left:16px;}
+  .tl-item{position:relative;padding-bottom:16px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-item::before{content:'';position:absolute;left:-21px;top:4px;width:7px;height:7px;border-radius:50%;background:var(--orange);}
+  .tl-day{font-size:11px;font-weight:700;color:var(--orange-dark);margin-bottom:2px;}
+  .tl-body{font-size:13px;line-height:1.6;}
+  .tl-body b{color:var(--ink);font-weight:700;}
+
+  /* Holdings detail cards (grid) */
+  .holdings-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media(max-width:640px){.holdings-grid{grid-template-columns:1fr;}}
+  .holding-card{border:1px solid var(--line);border-radius:4px;padding:14px 16px;position:relative;}
+  .holding-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;}
+  .holding-ticker{font-size:11px;font-weight:700;color:var(--orange-dark);letter-spacing:0.03em;}
+  .holding-name{font-size:15px;font-weight:700;margin-top:1px;}
+  .holding-price{font-size:14.5px;font-weight:700;text-align:right;cursor:pointer;}
+  .holding-change{font-size:12px;text-align:right;}
+  .holding-note{margin-top:9px;font-size:12.5px;line-height:1.55;color:#333;}
+  .holding-tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;}
+  .tag{font-size:10.5px;padding:2px 8px;border:1px solid var(--line);border-radius:3px;color:var(--sub);}
+  .del-btn{
+    position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;
+    border:1px solid var(--line);background:#fff;color:var(--sub);font-size:11px;line-height:1;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+  }
+  .del-btn:hover{background:var(--loss);color:#fff;border-color:var(--loss);}
+
+  /* Add form */
+  .add-form{background:var(--bg-alt);border:1px dashed var(--line);border-radius:4px;padding:14px 16px;margin-top:14px;}
+  .add-form-label{font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;}
+  .add-form-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .add-form-row input{
+    flex:1;min-width:100px;padding:8px 10px;border:1px solid var(--line);border-radius:4px;font-size:13px;
+    font-family:inherit;
+  }
+  .add-form-row button{
+    padding:8px 16px;background:var(--orange);color:#fff;border:none;border-radius:4px;
+    font-size:13px;font-weight:700;cursor:pointer;
+  }
+  .add-form-row button:hover{background:var(--orange-dark);}
+
+  /* Value bar */
+  .value-bar{
+    display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:12px;
+    background:var(--navy);color:#fff;border-radius:4px;padding:16px 18px;margin-bottom:14px;
+  }
+  .value-bar-label{font-size:11px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#9BA3AF;}
+  .value-bar-amount{font-size:19px;font-weight:800;cursor:pointer;color:#fff;}
+  .value-bar-amount.masked{color:#9BA3AF;font-weight:600;font-size:13px;letter-spacing:0.02em;}
+  .refresh-wrap{display:flex;align-items:center;gap:8px;}
+  .refresh-btn{
+    padding:7px 14px;background:var(--orange);color:#fff;border:none;border-radius:4px;
+    font-size:12.5px;font-weight:700;cursor:pointer;
+  }
+  .refresh-btn:hover{background:var(--orange-dark);}
+  .refresh-btn:disabled{background:#5B6470;cursor:default;}
+  .refresh-status{font-size:11px;color:#9BA3AF;}
+
+  /* Masked value (per-row) */
+  .value-cell{cursor:pointer;}
+  .value-cell.masked{color:var(--sub);font-size:11.5px;}
+  .value-tag{cursor:pointer;}
+  .value-tag.masked{color:var(--sub);}
+
+  /* Full holdings table */
+  .full-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:18px;}
+  .full-table th{text-align:left;font-weight:700;font-size:10.5px;letter-spacing:0.03em;text-transform:uppercase;color:var(--sub);padding:7px 9px;border-bottom:1px solid var(--line);background:var(--bg-alt);}
+  .full-table td{padding:8px 9px;border-bottom:1px solid var(--line);}
+  .full-table tbody tr{cursor:pointer;transition:background .1s;}
+  .full-table tbody tr:hover{background:#FFF4EB;}
+  .full-table .tkr{font-weight:700;}
+  .full-table .shares{color:var(--sub);}
+  .full-table .del-cell{width:28px;text-align:center;}
+  .full-table .del-btn{position:static;margin:0 auto;}
+
+  /* Outlook */
+  .outlook-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:640px){.outlook-cols{grid-template-columns:1fr;}}
+  .outlook-col-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;}
+  .outlook-col.watch .outlook-col-label{color:var(--gain);}
+  .outlook-col.caution .outlook-col-label{color:var(--loss);}
+  .outlook-list{list-style:none;margin:0;padding:0;}
+  .outlook-list li{font-size:13px;line-height:1.6;padding:9px 0;border-bottom:1px solid var(--line);}
+  .outlook-list li:last-child{border-bottom:none;}
+
+  /* Portfolio note */
+  .portfolio-note{background:var(--navy);color:#EDEFF2;border-radius:4px;padding:22px 24px;}
+  .portfolio-note-head{font-size:11px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--orange);margin-bottom:12px;}
+  .portfolio-note p{font-size:13.5px;line-height:1.7;margin:0 0 12px;}
+  .portfolio-note p:last-child{margin-bottom:0;}
+  .portfolio-note strong{color:#fff;}
+
+  .footer-note{max-width:980px;margin:36px auto 0;padding:14px 24px 0;font-size:11px;color:var(--sub);border-top:1px solid var(--line);}
+
+  /* Chart modal */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(10,14,20,0.55);z-index:100;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:#fff;border-radius:6px;width:100%;max-width:640px;padding:22px 24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);}
+  .modal-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;}
+  .modal-name{font-size:16px;font-weight:800;}
+  .modal-ticker{font-size:11.5px;color:var(--sub);}
+  .modal-close{cursor:pointer;color:var(--sub);font-size:13px;}
+  .modal-price-row{display:flex;align-items:baseline;gap:10px;margin:10px 0 16px;}
+  .modal-price{font-size:26px;font-weight:800;}
+  .modal-change{font-size:13.5px;font-weight:600;}
+  .modal-tabs{display:flex;gap:4px;margin-bottom:14px;flex-wrap:wrap;}
+  .modal-tab{font-size:12px;font-weight:600;padding:5px 12px;border-radius:14px;border:1px solid var(--line);cursor:pointer;color:var(--sub);background:#fff;}
+  .modal-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .modal-chart{width:100%;height:230px;}
+  .axis-label{font-size:9.5px;fill:#5B6470;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Helvetica Neue',Arial,sans-serif;}
+  .grid-line{stroke:#E3E5E8;stroke-width:1;}
+  .crosshair-dot{fill:#0A0E14;}
+  .modal-foot{margin-top:10px;font-size:10.5px;color:var(--sub);}
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="topbar-brand">Jun's <span>Treasury</span></div>
+    <div class="topbar-meta">2026.07.29 (WED) · 뉴욕장 마감 기준</div>
+  </div>
+
+  <div class="masthead">
+    <div class="masthead-title">Jun's Treasury</div>
+    <div class="masthead-sub">나만의 자산 창고, 매일 조금씩 쌓이는 꿈 — 매크로, 시장, 보유종목, 전망, 종합 제언</div>
+  </div>
+
+  <div class="calendar-wrap">
+    <div class="calendar-label">7월 주요 일정 (클릭하면 상세 내용)</div>
+    <div class="cal-scroll">
+      <div class="cal-item" data-detail="d0"><div class="cal-date">7/22</div><div class="cal-desc">ServiceNow(NOW) 실적 발표완료</div><span class="cal-tag past">발표완료</span></div>
+      <div class="cal-item" data-detail="d1"><div class="cal-date">7/28-29</div><div class="cal-desc">FOMC 정례회의</div><span class="cal-tag fomc">FOMC</span></div>
+      <div class="cal-item today" data-detail="d2"><div class="cal-date">7/29 (오늘)</div><div class="cal-desc">FOMC 금리 결정 발표</div><span class="cal-tag fomc">FOMC</span></div>
+      <div class="cal-item" data-detail="d3"><div class="cal-date">7/30</div><div class="cal-desc">Pagaya(PGY) 2분기 실적</div><span class="cal-tag holding">보유종목</span></div>
+      <div class="cal-item" data-detail="d3b"><div class="cal-date">7/30</div><div class="cal-desc">Reddit(RDDT) 2분기 실적</div><span class="cal-tag holding">보유종목</span></div>
+      <div class="cal-item" data-detail="d4"><div class="cal-date">7/30</div><div class="cal-desc">Microsoft, Meta 실적</div><span class="cal-tag">빅테크</span></div>
+      <div class="cal-item" data-detail="d5"><div class="cal-date">7/31</div><div class="cal-desc">Apple, Amazon 실적</div><span class="cal-tag">빅테크</span></div>
+      <div class="cal-item" data-detail="d6"><div class="cal-date">8/1</div><div class="cal-desc">7월 고용지표 발표</div><span class="cal-tag">지표</span></div>
+      <div class="cal-item" data-detail="d7"><div class="cal-date">8/17</div><div class="cal-desc">Pagaya 정기 주주총회</div><span class="cal-tag holding">보유종목</span></div>
+      <div class="cal-item" data-detail="d8"><div class="cal-date">8/26</div><div class="cal-desc">Salesforce(CRM) 2분기 실적</div><span class="cal-tag holding">보유종목</span></div>
+    </div>
+    <div class="cal-detail" id="cal-detail-panel">
+      <span class="cal-detail-close" onclick="closeDetail()">닫기 ✕</span>
+      <div class="cal-detail-title" id="cal-detail-title"></div>
+      <div id="cal-detail-body"></div>
+    </div>
+  </div>
+
+  <div class="quote-box">
+    <div class="quote-eyebrow">Today's Takeaway</div>
+    <div class="quote-text">"좋은 기업의 나쁜 소식은 매수 기회다. 나쁜 기업의 좋은 소식은 함정일 수 있다." 오늘 포트폴리오 관점에서 PGY의 조정은 전자에 가깝고, 반도체 랠리는 후자를 경계할 시점.</div>
+    <div class="quote-attr">버핏·린치 관점 종합 코멘트 · 샘플 문구 (실제 데이터 연동 시 매일 갱신)</div>
+  </div>
+
+  <!-- 1. Macro -->
+  <div class="section">
+    <div class="section-head"><span class="section-num">01</span><h2 class="section-title">거시 환경</h2></div>
+    <div class="macro-grid">
+      <div class="macro-card"><div class="macro-card-label">금리 · 연준</div><div class="macro-card-body">7월 FOMC 결과 발표 임박. 9월 인하 기대감 유지, 최근 CPI는 예상치 부합.</div></div>
+      <div class="macro-card"><div class="macro-card-label">환율 · 원자재</div><div class="macro-card-body">원/달러 1,455원 부근, 최근 1주 1,450~1,463원 박스권. WTI $71선 유지.</div></div>
+    </div>
+    <div class="week-label">최근 1주일 흐름</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-day">7/23 (목)</div><div class="tl-body">2분기 GDP 예비치 시장 예상 상회. <b>연내 추가 인하 기대</b>가 다소 후퇴하며 국채 금리 소폭 반등.</div></div>
+      <div class="tl-item"><div class="tl-day">7/24 (금)</div><div class="tl-body">7월 PCE 물가지표 발표, 전년比 둔화세 확인. 나스닥 사상 최고치 경신.</div></div>
+      <div class="tl-item"><div class="tl-day">7/27 (월)</div><div class="tl-body"><b>중동 지정학 리스크</b> 재부각 — 유가 상승, 안전자산 선호로 달러 강세·원화 약세 압력.</div></div>
+      <div class="tl-item"><div class="tl-day">7/28 (화)</div><div class="tl-body">빅테크 실적 시즌 본격화. AI 인프라 투자 가이던스 상향 발표 잇따르며 반도체 업종 강세.</div></div>
+      <div class="tl-item"><div class="tl-day">7/29 (수) · 오늘</div><div class="tl-body">7월 FOMC 정례회의 이틀째 — 금리 동결 전망 우세, 파월 기자회견에서 9월 인하 시사 여부가 관전 포인트.</div></div>
+    </div>
+  </div>
+
+  <!-- 2. Markets -->
+  <div class="section">
+    <div class="section-head"><span class="section-num">02</span><h2 class="section-title">주요 지수 · 환율 · 원자재</h2></div>
+    <div class="section-hint">숫자를 클릭하면 기간별 그래프가 열립니다</div>
+    <table class="ticker-table" id="macro-table">
+      <thead><tr><th>지표</th><th>현재가</th><th>등락</th></tr></thead>
+      <tbody>
+        <tr data-sym="SPX" data-name="S&P 500" data-price="6,481.20" data-change="+0.42%" data-up="1"><td>S&amp;P 500</td><td class="clickable-val">6,481.20</td><td class="up">+0.42%</td></tr>
+        <tr data-sym="DJI" data-name="Dow Jones" data-price="44,982.10" data-change="-0.11%" data-up="0"><td>Dow Jones</td><td class="clickable-val">44,982.10</td><td class="down">-0.11%</td></tr>
+        <tr data-sym="IXIC" data-name="Nasdaq" data-price="21,340.55" data-change="+0.68%" data-up="1"><td>Nasdaq</td><td class="clickable-val">21,340.55</td><td class="up">+0.68%</td></tr>
+        <tr data-sym="RUT" data-name="Russell 2000" data-price="2,318.40" data-change="+0.25%" data-up="1"><td>Russell 2000</td><td class="clickable-val">2,318.40</td><td class="up">+0.25%</td></tr>
+        <tr data-sym="VIX" data-name="VIX(변동성지수)" data-price="14.82" data-change="-2.1%" data-up="0"><td>VIX (변동성지수)</td><td class="clickable-val">14.82</td><td class="down">-2.1%</td></tr>
+        <tr data-sym="US10Y" data-name="미 국채 10년물 금리" data-price="4.21%" data-change="+0.03%p" data-up="1"><td>미 국채 10년물</td><td class="clickable-val">4.21%</td><td class="up">+0.03%p</td></tr>
+        <tr data-sym="KRW" data-name="USD/KRW" data-price="1,455.10" data-change="-0.30%" data-up="0"><td>USD/KRW</td><td class="clickable-val">1,455.10</td><td class="down">-0.30%</td></tr>
+        <tr data-sym="EURUSD" data-name="EUR/USD" data-price="1.0842" data-change="+0.12%" data-up="1"><td>EUR/USD</td><td class="clickable-val">1.0842</td><td class="up">+0.12%</td></tr>
+        <tr data-sym="USDJPY" data-name="USD/JPY" data-price="152.30" data-change="+0.18%" data-up="1"><td>USD/JPY</td><td class="clickable-val">152.30</td><td class="up">+0.18%</td></tr>
+        <tr data-sym="DXY" data-name="달러인덱스(DXY)" data-price="101.85" data-change="+0.15%" data-up="1"><td>달러인덱스(DXY)</td><td class="clickable-val">101.85</td><td class="up">+0.15%</td></tr>
+        <tr data-sym="WTI" data-name="WTI 원유" data-price="$71.20" data-change="+0.9%" data-up="1"><td>WTI 원유</td><td class="clickable-val">$71.20</td><td class="up">+0.9%</td></tr>
+        <tr data-sym="BRENT" data-name="브렌트유" data-price="$74.85" data-change="+0.8%" data-up="1"><td>브렌트유</td><td class="clickable-val">$74.85</td><td class="up">+0.8%</td></tr>
+        <tr data-sym="GOLD" data-name="금(Gold)" data-price="$3,412.60" data-change="+0.5%" data-up="1"><td>금 (Gold)</td><td class="clickable-val">$3,412.60</td><td class="up">+0.5%</td></tr>
+        <tr data-sym="SILVER" data-name="은(Silver)" data-price="$38.90" data-change="-1.2%" data-up="0"><td>은 (Silver)</td><td class="clickable-val">$38.90</td><td class="down">-1.2%</td></tr>
+        <tr data-sym="NATGAS" data-name="천연가스" data-price="$3.28" data-change="-2.4%" data-up="0"><td>천연가스</td><td class="clickable-val">$3.28</td><td class="down">-2.4%</td></tr>
+        <tr data-sym="COPPER" data-name="구리" data-price="$4.62" data-change="+1.1%" data-up="1"><td>구리</td><td class="clickable-val">$4.62</td><td class="up">+1.1%</td></tr>
+        <tr data-sym="BTC" data-name="비트코인" data-price="$118,240" data-change="+1.8%" data-up="1"><td>비트코인</td><td class="clickable-val">$118,240</td><td class="up">+1.8%</td></tr>
+        <tr data-sym="ETH" data-name="이더리움" data-price="$4,120" data-change="+2.3%" data-up="1"><td>이더리움</td><td class="clickable-val">$4,120</td><td class="up">+2.3%</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. Holdings -->
+  <div class="section">
+    <div class="section-head"><span class="section-num">03</span><h2 class="section-title">보유 종목</h2></div>
+    <div class="section-hint">보유종목 전체 · 가격을 클릭하면 그래프, ✕를 클릭하면 삭제, 아래에서 종목 추가 (주식·코인 모두 가능)</div>
+
+    <div class="value-bar" id="value-bar">
+      <div class="refresh-wrap">
+        <button class="refresh-btn" id="refresh-btn">시세 새로고침</button>
+        <span class="refresh-status" id="refresh-status"></span>
+      </div>
+    </div>
+
+    <table class="full-table" id="full-holdings">
+      <thead><tr><th>티커</th><th>종목명</th><th>현재가</th><th></th></tr></thead>
+      <tbody id="full-holdings-body"></tbody>
+    </table>
+
+    <div class="add-form" id="add-form">
+      <div class="add-form-label">+ 종목 추가 (주식 티커 또는 BTC/ETH 등 코인)</div>
+      <div class="add-form-row">
+        <input type="text" id="add-sym" placeholder="티커 (예: AAPL, BTC)" maxlength="10">
+        <input type="text" id="add-name" placeholder="종목명 (선택)">
+        <input type="number" id="add-price" placeholder="현재가($)" min="0" step="any">
+        <button id="add-btn">추가</button>
+      </div>
+    </div>
+
+    <div class="week-label" style="margin-top:26px;">종목별 브리핑</div>
+    <div class="holdings-grid" id="holdings-grid"></div>
+  </div>
+
+  <!-- 4. Outlook -->
+  <div class="section">
+    <div class="section-head"><span class="section-num">04</span><h2 class="section-title">전망 및 유의사항</h2></div>
+    <div class="outlook-cols">
+      <div class="outlook-col watch">
+        <div class="outlook-col-label">기대해볼 만한 것</div>
+        <ul class="outlook-list">
+          <li>PGY 7/30, RDDT 7/30 실적 — forward flow 갱신, 광고 매출 성장 확인되면 재평가 계기</li>
+          <li>9월 FOMC 인하 시 성장주 전반 리레이팅 가능성</li>
+          <li>CRM 8/26 실적 — 연초 대비 낙폭 과대 구간에서 반등 트리거 가능성</li>
+        </ul>
+      </div>
+      <div class="outlook-col caution">
+        <div class="outlook-col-label">조심해야 할 것</div>
+        <ul class="outlook-list">
+          <li>반도체·SaaS 테마 쏠림 — 포트폴리오 집중도 이미 높은 상태</li>
+          <li>TEM 루머성 재료 — 공시 전 과도한 반응 주의</li>
+          <li>NOW·CRM 공통 — 밸류에이션 대비 성장 둔화 우려가 여전히 해소되지 않은 상태</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Portfolio note -->
+  <div class="section">
+    <div class="section-head"><span class="section-num">05</span><h2 class="section-title">종합 포트폴리오 제언</h2></div>
+    <div class="portfolio-note">
+      <div class="portfolio-note-head">버핏·린치 관점 코멘트</div>
+      <p><strong>버핏 관점:</strong> PGY의 단기 조정은 "가격이 아니라 가치가 훼손됐는가"를 먼저 봐야 할 사안. CRM처럼 연초 대비 낙폭이 과한 우량 SaaS 기업은 "훌륭한 기업을 적정 가격에" 매수할 기회일 수 있음.</p>
+      <p><strong>린치 관점:</strong> "당신이 이해하는 사업에 투자하라" — TEM은 루머 단계보다 실제 공시 이후 대응해도 늦지 않음. RDDT는 어닝 서프라이즈에도 주가가 부진한 "실적과 주가의 괴리" 구간.</p>
+      <p>24종목 전반으로는 AI/반도체(IONQ, MU, MRVL, ASML, IREN 등) 및 성장주 비중이 높아, 신규 매수보다는 <strong>테마 집중도와 변동성 관리</strong>가 우선 과제로 보임.</p>
+    </div>
+  </div>
+
+  <div class="footer-note">샘플 데이터 · 실제 서비스 연동 전 레이아웃 확인용 목업입니다.</div>
+
+  <!-- Chart modal -->
+  <div class="modal-overlay" id="chart-modal">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div><div class="modal-name" id="modal-name"></div><div class="modal-ticker" id="modal-ticker"></div></div>
+        <div class="modal-close" onclick="closeChart()">닫기 ✕</div>
+      </div>
+      <div class="modal-price-row">
+        <div class="modal-price" id="modal-price"></div>
+        <div class="modal-change" id="modal-change"></div>
+      </div>
+      <div class="modal-tabs" id="modal-tabs"></div>
+      <svg class="modal-chart" id="modal-chart" viewBox="0 0 640 230" preserveAspectRatio="none"></svg>
+      <div class="modal-foot">샘플 그래프 · 실제 데이터 연동 전 목업입니다</div>
+    </div>
+  </div>
+
+<script>
+  // ---- Calendar detail ----
+  const details = {
+    d0: { title: "ServiceNow(NOW) 2분기 실적 (발표완료)", body: "7월 22일 장 마감 후 발표. EPS $0.90으로 시장 예상치($0.76)를 큰 폭 상회했습니다. AI 제품(Now Assist, AI Control Tower) 채택 확대가 실적을 뒷받침했으나, 여전히 밸류에이션 부담(PER 60배 이상)이 남아있어 주가 반응은 제한적이었습니다." },
+    d1: { title: "FOMC 정례회의 (7/28-29)", body: "연준의 7월 정례 회의. 이틀간 진행되며 둘째 날(7/29) 오후 2시 ET에 금리 결정이 발표됩니다. 금리 동결이 유력하나, 성명서 문구 변화와 파월 의장 기자회견에서 9월 인하 가능성을 어떻게 시사하는지가 핵심 관전 포인트입니다." },
+    d2: { title: "FOMC 금리 결정 발표", body: "한국시간 오늘 밤(현지 7/29 오후 2시 ET) 기준금리 결정 발표. 이어서 오후 2시 30분 파월 의장 기자회견. 시장은 동결을 이미 반영하고 있어, 실제 변동성은 회견 발언에서 나올 가능성이 큽니다." },
+    d3: { title: "Pagaya(PGY) 2분기 실적", body: "7월 30일 장 시작 전 실적 발표, 같은 날 오전 8:30 ET 컨퍼런스 콜 예정. Blue Owl과의 forward flow 계약 갱신 여부와 ABS 발행 규모 추이가 핵심 체크포인트입니다." },
+    d3b: { title: "Reddit(RDDT) 2분기 실적", body: "7월 30일 장 마감 후 실적 발표, 오후 4:30 ET 컨퍼런스 콜 예정. 시장 컨센서스는 매출 약 $745M(전년比 +49%), EPS $0.99." },
+    d4: { title: "Microsoft · Meta 실적", body: "7월 30일 발표 예정. AI 인프라 투자(캐펙스) 가이던스 상향 여부가 반도체·클라우드 밸류체인 전반에 영향을 줄 수 있습니다." },
+    d5: { title: "Apple · Amazon 실적", body: "7월 31일 발표 예정. 소비자 지출 흐름과 클라우드(AWS) 성장률이 주요 관전 포인트입니다." },
+    d6: { title: "7월 비농업 고용지표", body: "8월 1일 발표. 고용 둔화 정도가 9월 FOMC의 인하 폭 전망에 직접적인 영향을 줄 수 있는 지표입니다." },
+    d7: { title: "Pagaya 정기 주주총회", body: "8월 17일 오후 5시(이스라엘 시간) 화상으로 진행." },
+    d8: { title: "Salesforce(CRM) 2분기 실적", body: "8월 26일 장 마감 후 발표 예정. Agentforce(AI 에이전트) 관련 매출 기여도와 구독 갱신율이 핵심 체크포인트입니다." },
+  };
+  const calItems = document.querySelectorAll('.cal-item');
+  const calPanel = document.getElementById('cal-detail-panel');
+  calItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const d = details[item.getAttribute('data-detail')];
+      if (!d) return;
+      calItems.forEach(i => i.classList.remove('selected'));
+      item.classList.add('selected');
+      document.getElementById('cal-detail-title').textContent = d.title;
+      document.getElementById('cal-detail-body').textContent = d.body;
+      calPanel.classList.add('open');
+    });
+  });
+  function closeDetail(){ calPanel.classList.remove('open'); calItems.forEach(i => i.classList.remove('selected')); }
+
+  // ---- Holdings data: notes + persistence ----
+  const notes = {
+    PGY: "7/30 실적 발표 예정. Blue Owl과의 forward flow 계약 갱신 여부가 핵심 관전 포인트. ABS 발행이 올해 개인·자동차대출 합산 $55억 이상으로 사상 최대 페이스이며, S&P가 7/23 등급 전망을 '안정적'에서 '긍정적'으로 상향 — 신용 지표 개선이 반영됨.",
+    NOW: "7/22 실적에서 EPS $0.90으로 컨센서스($0.76)를 크게 상회했으나, PER 60배 안팎의 고밸류에이션 부담으로 주가 반응은 제한적. cRPO 가이던스가 19.5%로 다소 둔화돼 AI 수익화 속도에 대한 의문도 일부 제기됨. 다음 실적은 10/28.",
+    CRM: "5/27 1분기 실적은 무난했지만 이후 주가는 연초 대비 -10% 안팎 부진. 8/26 2분기 실적에서 Agentforce(AI 에이전트) 매출 기여가 가시화되는지가 리레이팅의 관건. 컨센서스는 여전히 Buy 우세지만, SaaS 동종업종 대비 소외된 상태.",
+    RDDT: "7/30 장 마감 후 실적 발표 — 컨센서스 매출 $745M(+49% YoY), EPS $0.99. 최근 4개 분기 연속 어닝 서프라이즈(평균 +67%)를 기록 중이나, 정작 주가는 연초 대비 -22%로 소셜/디지털광고 업종 전반의 밸류에이션 재조정을 반영.",
+    TEM: "7/20 Personalis를 약 $15억 규모의 전액 주식 거래로 인수한다고 발표 — MRD(미세잔존질환) 암 검사 플랫폼 통합이 목적이나, 희석 우려로 주가는 발표 당일 -8%. 7/30 2분기 실적(매출 +21% YoY 전망) 발표 예정이며, 데이터서비스 부문(+40% YoY)은 여전히 강점.",
+    COHR: "Raymond James가 7/2 'Strong Buy' 유지하며 목표가를 $435로 상향, Citi 등도 AI向 광트랜시버 수요와 신경영진의 마진 개선 스토리에 긍정적. 8/11 4분기 실적 발표 예정.",
+    DECK: "7/23 1분기(FY27) 실적에서 분기 매출 최초로 $10억 돌파했으나, 2분기 가이던스가 시장 기대에 못 미쳐 반응 엇갈림 — UBS는 Buy·$161 목표가 재확인한 반면 Wells Fargo는 Underweight로 $85까지 하향. HOKA·UGG DTC 성장이 여전히 핵심 매수 논리.",
+    GLW: "7/28 2분기 실적이 컨센서스를 상회하며 발표 직후 Mizuho($270), BofA($243), Citi($240) 등 목표가 상향이 잇따름 — AI 데이터센터向 광섬유·유리 수요가 배경. 다만 실적 발표 전후 변동성이 큰 종목이라는 점은 유의.",
+    IONQ: "Benchmark가 7/27 'Buy' 재개하며 목표가 $60 제시, SkyWater Technology 파운드리 인수에 대한 최종 규제 승인도 확보. 컨센서스는 Strong Buy·평균 목표가 $70 안팎이지만, 양자컴퓨팅 특성상 적자 단계의 고변동성 테마주라는 점은 유의. 8/12 실적 발표.",
+    META: "Strong Buy 컨센서스(평균 목표가 $826). 오늘(7/29) 장 마감 후 2분기 실적 발표 예정 — BlackRock과 텍사스 엘패소에 $140억 규모 데이터센터 합작 프로젝트를 발표했고, Reality Labs 부문 적자와 레이밴 스마트글라스 프라이버시 이슈도 함께 주목받는 중. 과거 한 분기 실적 발표 후 하루 만에 시총 $1,750억이 증발한 전례가 있어 실적 발표 변동성이 큰 종목.",
+    NVO: "컨센서스는 여전히 'Buy'지만 평균 목표가($47~48)가 현재가와 큰 차이가 없어 눈높이가 낮아진 상태. 일라이릴리와의 GLP-1 경쟁 심화 및 광고 관련 소송이 부담 요인. 다만 최대 DKK 150억 규모의 자사주 매입을 지속 중이며, 8/5 2분기 실적 예정.",
+    PL: "의견이 갈림 — Goldman Sachs는 7/14 Neutral·$25 유지한 반면 Deutsche Bank(Buy, 목표가 $36으로 하향)와 Wedbush(Outperform)는 긍정적. 국방·정보(Defense&Intelligence) 부문 매출이 전년比 +82%로 급성장했고 수주잔고(RPO)도 +371% — 다만 최근 내부자 매도는 확인할 부분.",
+    ZETA: "Strong Buy 컨센서스, BofA가 6/24 목표가를 $28로 상향. OpenAI·Snowflake·Palantir와의 AI 파트너십이 플랫폼 스토리를 뒷받침하며, 경영진은 2026년 매출 성장 가이던스를 21%→34%로 상향. 8/4 2분기 실적 예정.",
+    AMZN: "Strong Buy 컨센서스(평균 목표가 $313~319). 7/30 실적 앞두고 옵션시장은 ±7% 변동성을 반영 중. UBS는 AI 인프라 투자 확대를 이유로 목표가를 $305로 소폭 하향한 반면, BMO($360)·Jefferies($320)는 AWS·광고 매출 강세를 근거로 낙관적.",
+    ASML: "Strong Buy 컨센서스, 7/16 JPMorgan($2,400)·Wells Fargo($2,500)·Bernstein($2,623) 등 목표가가 대거 상향됐으나, 최근 1주일간은 중국의 반도체 장비 자립 이슈로 주가가 조정받는 등 헤드라인에 민감한 흐름을 보이는 중.",
+    IREN: "Bernstein이 Microsoft·Nvidia向 AI 클라우드 계약을 근거로 Buy·$100 목표가를 유지하고 있고, 2026년 ARR(연환산매출) 목표도 $40억 이상으로 상향됐음. 다만 창업자 대상 대규모 지분 보상안(희석 우려)과 골든스테이트 워리어스 스폰서십 등 부수적 이슈로 최근 주가는 급락. 다음 실적 9/16.",
+    MRVL: "Strong Buy 컨센서스(평균 목표가 $254, Keybanc는 $400). 1분기(FY27) 매출이 $24.2억으로 사상 최대를 기록하고 2분기도 $27억 가이던스를 제시했으나, 최근 한 건의 Hold 하향(밸류에이션·마진 우려)과 반도체 업종 전반의 조정으로 주가는 약세.",
+    MU: "Strong Buy 컨센서스(평균 목표가 $1,490 안팎). Anthropic과의 전략적 파트너십 및 총 $220억 규모의 장기 공급계약이 'AI 메모리 슈퍼사이클' 스토리의 핵심. 다만 중국 메모리 경쟁(CXMT 상장, SK하이닉스 나스닥 상장) 우려와 마이클 버리의 공매도 포지션 공개로 고점 대비 약 -22% 조정.",
+    SEZL: "Buy 우세 컨센서스(목표가 $150~165)지만, 6월말 Keefe Bruyette·Oppenheimer가 밸류에이션을 이유로 잇달아 하향해 분위기는 다소 냉각. 2025년 매출은 +66% 성장했고, 다만 증권 소송 조사(Lowey Dannenberg)는 지켜볼 변수.",
+    TSLA: "Buy 우세지만 목표가 스펙트럼이 $125~$600으로 유난히 넓게 갈리는 종목. 7/23 실적은 마진 둔화와 AI/로보택시 관련 신규 모멘텀 부재로 실망감을 안겼고 주가는 1년래 가장 과매도 구간. Piper Sandler는 목표가를 $450으로 하향한 반면, 캐시 우드의 ARK는 저가 매수에 나섬.",
+    COPX: "구리 채굴기업 바스켓 ETF — 전력망·AI 데이터센터發 전력 인프라 투자 확대 테마의 수혜가 기대되는 자산이나, 구리 현물보다 개별 광산주 실적·비용 이슈에 더 민감해 변동성이 큰 편.",
+    SLV: "은 현물을 추종하는 ETF — 안전자산 수요와 태양광 등 산업 수요가 동시에 가격을 움직이는 이중 구조. 금 대비 유동성이 낮아 상승·하락 폭이 더 크게 나타나는 경향.",
+    JEPQ: "나스닥100 커버드콜 전략 ETF — 매월 프리미엄 수익을 배당 형태로 지급해 인컴 목적에 적합하나, 강한 기술주 랠리 국면에서는 상승분을 온전히 누리기 어려운 구조.",
+    VOO: "S&P500을 추종하는 저비용 코어 ETF — 포트폴리오의 안정적인 중심축 역할. 개별 종목 리스크 없이 미국 대형주 전반에 분산 투자하는 자산.",
+  };
+  const defaultHoldings = [
+    {sym:"COHR", name:"Coherent Corp.", price:96.10},
+    {sym:"CRM", name:"Salesforce", price:258.90},
+    {sym:"DECK", name:"Deckers Brands", price:118.40},
+    {sym:"GLW", name:"Corning", price:52.30},
+    {sym:"IONQ", name:"IonQ", price:41.20},
+    {sym:"NOW", name:"ServiceNow", price:1024.10},
+    {sym:"NVO", name:"Novo Nordisk", price:68.50},
+    {sym:"PL", name:"Planet Labs", price:9.85},
+    {sym:"RDDT", name:"Reddit", price:147.30},
+    {sym:"ZETA", name:"Zeta Global", price:16.90},
+    {sym:"AMZN", name:"Amazon", price:232.10},
+    {sym:"ASML", name:"ASML Holding", price:1140.00},
+    {sym:"IREN", name:"IREN Ltd.", price:14.60},
+    {sym:"JEPQ", name:"JPMorgan Nasdaq Premium", price:54.20},
+    {sym:"META", name:"Meta Platforms", price:712.40},
+    {sym:"MRVL", name:"Marvell Technology", price:74.80},
+    {sym:"MU", name:"Micron Technology", price:118.90},
+    {sym:"PGY", name:"Pagaya Technologies", price:28.40},
+    {sym:"SEZL", name:"Sezzle", price:112.60},
+    {sym:"TEM", name:"Tempus AI", price:62.85},
+    {sym:"TSLA", name:"Tesla", price:412.70},
+    {sym:"COPX", name:"Global X Copper Miners ETF", price:44.10},
+    {sym:"SLV", name:"iShares Silver Trust", price:31.20},
+    {sym:"VOO", name:"Vanguard S&P 500 ETF", price:598.40},
+  ];
+
+  const STORAGE_KEY = 'juns-treasury-holdings';
+  let holdings = [];
+  try{
+    const saved = localStorage.getItem(STORAGE_KEY);
+    holdings = saved ? JSON.parse(saved) : defaultHoldings.slice();
+  } catch(e){ holdings = defaultHoldings.slice(); }
+
+  function saveHoldings(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(holdings)); } catch(e){}
+  }
+
+  function pseudoChange(sym){
+    const up = sym.charCodeAt(0)%2===0;
+    const pct = (0.3+(sym.length%5)*0.4).toFixed(1);
+    return { change: (up?'+':'-')+pct+'%', up };
+  }
+
+  function fmtUSD(n){ return '$' + n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+  const fhBody = document.getElementById('full-holdings-body');
+  const gridEl = document.getElementById('holdings-grid');
+
+  function renderHoldings(){
+    fhBody.innerHTML = '';
+    gridEl.innerHTML = '';
+
+    holdings.forEach(h => {
+      const priceStr = fmtUSD(h.price);
+      const {change, up} = pseudoChange(h.sym);
+      const priceTag = h.priceKind === 'live' ? '<span class="tag" style="margin-left:6px;">실시간</span>' : (h.priceKind === 'close' ? '<span class="tag" style="margin-left:6px;">종가</span>' : '');
+
+      // table row
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td class="tkr clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${h.sym}</td>
+        <td>${h.name}</td>
+        <td class="clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}${priceTag}</td>
+        <td class="del-cell"><span class="del-btn" data-remove="${h.sym}">✕</span></td>`;
+      fhBody.appendChild(tr);
+
+      // brief card
+      const card = document.createElement('div');
+      card.className = 'holding-card';
+      card.innerHTML = `
+        <span class="del-btn" data-remove="${h.sym}">✕</span>
+        <div class="holding-top">
+          <div><div class="holding-ticker">${h.sym}</div><div class="holding-name">${h.name}</div></div>
+          <div><div class="holding-price" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}</div>
+            <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div></div>
+        </div>
+        <div class="holding-note">${notes[h.sym] || '관련 뉴스·공시 업데이트 예정.'}</div>
+      `;
+      gridEl.appendChild(card);
+    });
+  }
+  renderHoldings();
+
+  // ---- Live price refresh (best-effort; may be blocked by CORS depending on host) ----
+  function yahooSymbol(sym){
+    const map = {BTC:'BTC-USD', ETH:'ETH-USD'};
+    return map[sym] || sym;
+  }
+  async function fetchLivePrice(sym){
+    const url = 'https://query1.finance.yahoo.com/v8/finance/chart/' + encodeURIComponent(yahooSymbol(sym));
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('fetch failed: ' + res.status);
+    const data = await res.json();
+    const meta = data.chart.result[0].meta;
+    return { price: meta.regularMarketPrice, live: meta.marketState === 'REGULAR' };
+  }
+  async function refreshPrices(){
+    const btn = document.getElementById('refresh-btn');
+    const status = document.getElementById('refresh-status');
+    btn.disabled = true; status.textContent = '조회 중…';
+    let ok = 0, fail = 0;
+    for(const h of holdings){
+      try{
+        const { price, live } = await fetchLivePrice(h.sym);
+        h.price = price;
+        h.priceKind = live ? 'live' : 'close';
+        ok++;
+      } catch(e){ fail++; }
+    }
+    try{
+      const fx = await fetchLivePrice('USDKRW=X').catch(()=>null);
+      if(fx && fx.price) fxRate = fx.price;
+    } catch(e){}
+    saveHoldings();
+    renderHoldings();
+    btn.disabled = false;
+    status.textContent = fail === 0 ? `${ok}개 종목 갱신 완료` : `${ok}개 성공 · ${fail}개 실패 (브라우저 API 제한 가능)`;
+  }
+  document.getElementById('refresh-btn').addEventListener('click', refreshPrices);
+
+  // Add form
+  document.getElementById('add-btn').addEventListener('click', () => {
+    const sym = document.getElementById('add-sym').value.trim().toUpperCase();
+    const name = document.getElementById('add-name').value.trim() || sym;
+    const price = parseFloat(document.getElementById('add-price').value) || 0;
+    if(!sym) return;
+    if(holdings.some(h => h.sym === sym)){ alert('이미 보유 중인 종목입니다: ' + sym); return; }
+    holdings.push({sym, name, price});
+    saveHoldings();
+    renderHoldings();
+    document.getElementById('add-sym').value = '';
+    document.getElementById('add-name').value = '';
+    document.getElementById('add-price').value = '';
+  });
+
+  // Remove (event delegation, since rows/cards are re-rendered)
+  document.body.addEventListener('click', (e) => {
+    const rm = e.target.closest('[data-remove]');
+    if(rm){
+      const sym = rm.getAttribute('data-remove');
+      holdings = holdings.filter(h => h.sym !== sym);
+      saveHoldings();
+      renderHoldings();
+      return;
+    }
+  });
+
+  // ---- Chart modal logic ----
+  const periods = ['1일','5일','1개월','6개월','1년','3년','5년'];
+  const modal = document.getElementById('chart-modal');
+  const modalTabs = document.getElementById('modal-tabs');
+  const svg = document.getElementById('modal-chart');
+  let currentSeed = 0, currentBase = 100, currentUp = true;
+
+  function seededRandom(seed){ let x = Math.sin(seed) * 10000; return x - Math.floor(x); }
+
+  function genSeries(seed, points, volatility, trendUp){
+    let vals = [];
+    let v = 100;
+    for(let i=0;i<points;i++){
+      const r = seededRandom(seed + i*7.13) - 0.5;
+      const drift = trendUp ? 0.15 : -0.1;
+      v = v + r*volatility + drift;
+      vals.push(v);
+    }
+    return vals;
+  }
+
+  // Build x-axis tick labels for each period, counting back from today (2026-07-29)
+  const TODAY = new Date(2026, 6, 29); // month is 0-indexed: 6 = July
+  const WEEKDAY_KR = ['일','월','화','수','목','금','토'];
+
+  function fmtDate(d){ return (d.getMonth()+1) + '/' + d.getDate(); }
+  function fmtDateYear(d){ return d.getFullYear() + '.' + String(d.getMonth()+1).padStart(2,'0'); }
+
+  function buildXLabels(periodIdx, n){
+    // returns array of {index, label} for tick marks along the n data points
+    const ticksWanted = 6;
+    const idxs = [];
+    for(let t=0;t<ticksWanted;t++){
+      idxs.push(Math.round(t*(n-1)/(ticksWanted-1)));
+    }
+    let labels = [];
+    if(periodIdx===0){ // 1일 - market hours 9:30~16:00 ET
+      const times = ['09:30','10:36','11:42','12:48','13:54','16:00'];
+      labels = idxs.map((idx,t)=>({index:idx, label:times[t]}));
+    } else if(periodIdx===1){ // 5일
+      labels = idxs.map((idx,t)=>{
+        const d = new Date(TODAY); d.setDate(d.getDate() - (n-1-idx));
+        return {index:idx, label: fmtDate(d) + '('+WEEKDAY_KR[d.getDay()]+')'};
+      });
+    } else if(periodIdx===2){ // 1개월
+      labels = idxs.map((idx)=>{
+        const d = new Date(TODAY); d.setDate(d.getDate() - (n-1-idx));
+        return {index:idx, label: fmtDate(d)};
+      });
+    } else if(periodIdx===3){ // 6개월
+      labels = idxs.map((idx)=>{
+        const d = new Date(TODAY); d.setDate(d.getDate() - (n-1-idx)*7);
+        return {index:idx, label: fmtDate(d)};
+      });
+    } else if(periodIdx===4){ // 1년
+      labels = idxs.map((idx)=>{
+        const d = new Date(TODAY); d.setDate(d.getDate() - (n-1-idx)*7);
+        return {index:idx, label: fmtDate(d)};
+      });
+    } else if(periodIdx===5){ // 3년
+      labels = idxs.map((idx)=>{
+        const d = new Date(TODAY); d.setMonth(d.getMonth() - (n-1-idx));
+        return {index:idx, label: fmtDateYear(d)};
+      });
+    } else { // 5년
+      labels = idxs.map((idx)=>{
+        const d = new Date(TODAY); d.setMonth(d.getMonth() - (n-1-idx)*2);
+        return {index:idx, label: fmtDateYear(d)};
+      });
+    }
+    return labels;
+  }
+
+  function drawChart(seed, trendUp, periodIdx, unit){
+    const pointCounts = [24, 5, 22, 26, 52, 36, 60];
+    const vols = [1.2, 2.0, 3.2, 5.0, 8.0, 14.0, 20.0];
+    const n = pointCounts[periodIdx];
+    const vals = genSeries(seed, n, vols[periodIdx], trendUp);
+    const min = Math.min(...vals), max = Math.max(...vals);
+    const range = (max-min) || 1;
+
+    const W = 640, H = 230;
+    const marginLeft = 56, marginRight = 10, marginTop = 10, marginBottom = 26;
+    const plotW = W - marginLeft - marginRight;
+    const plotH = H - marginTop - marginBottom;
+
+    const xOf = i => marginLeft + (i/(n-1))*plotW;
+    const yOf = v => marginTop + plotH - ((v-min)/range)*plotH;
+
+    let linePath = '';
+    vals.forEach((v,i)=>{ linePath += (i===0?'M':'L') + xOf(i).toFixed(1) + ',' + yOf(v).toFixed(1) + ' '; });
+    const areaPath = linePath + `L${xOf(n-1).toFixed(1)},${marginTop+plotH} L${xOf(0).toFixed(1)},${marginTop+plotH} Z`;
+    const color = trendUp ? '#0E8A4B' : '#D62E2E';
+
+    // Y gridlines: 4 levels
+    const yLevels = 4;
+    let gridSvg = '';
+    for(let g=0; g<=yLevels; g++){
+      const val = min + (range*g/yLevels);
+      const y = yOf(val);
+      const label = unit==='pct' ? val.toFixed(1) : (val>=1000? val.toLocaleString(undefined,{maximumFractionDigits:0}) : val.toFixed(2));
+      gridSvg += `<line class="grid-line" x1="${marginLeft}" y1="${y.toFixed(1)}" x2="${W-marginRight}" y2="${y.toFixed(1)}"/>`;
+      gridSvg += `<text class="axis-label" x="${marginLeft-8}" y="${(y+3).toFixed(1)}" text-anchor="end">${label}</text>`;
+    }
+
+    // X labels
+    const xLabels = buildXLabels(periodIdx, n);
+    let xLabelSvg = '';
+    xLabels.forEach(({index,label})=>{
+      const x = xOf(index);
+      xLabelSvg += `<line class="grid-line" x1="${x.toFixed(1)}" y1="${marginTop}" x2="${x.toFixed(1)}" y2="${marginTop+plotH}"/>`;
+      xLabelSvg += `<text class="axis-label" x="${x.toFixed(1)}" y="${H-8}" text-anchor="middle">${label}</text>`;
+    });
+
+    svg.innerHTML = `
+      <defs><linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${color}" stop-opacity="0.18"/>
+        <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient></defs>
+      ${gridSvg}
+      ${xLabelSvg}
+      <path d="${areaPath}" fill="url(#grad)" stroke="none"/>
+      <path d="${linePath}" fill="none" stroke="${color}" stroke-width="2"/>
+    `;
+  }
+
+  function openChart(sym, name, price, change, up){
+    document.getElementById('modal-name').textContent = name;
+    document.getElementById('modal-ticker').textContent = sym;
+    document.getElementById('modal-price').textContent = price;
+    const changeEl = document.getElementById('modal-change');
+    changeEl.textContent = change;
+    changeEl.className = 'modal-change ' + (up? 'up':'down');
+    currentSeed = sym.split('').reduce((a,c)=>a+c.charCodeAt(0), 0);
+    currentUp = up;
+    const unit = (sym==='KRW') ? 'num' : 'num';
+    modalTabs.innerHTML = '';
+    periods.forEach((p, idx) => {
+      const btn = document.createElement('div');
+      btn.className = 'modal-tab' + (idx===2 ? ' active':'');
+      btn.textContent = p;
+      btn.onclick = () => {
+        modalTabs.querySelectorAll('.modal-tab').forEach(t=>t.classList.remove('active'));
+        btn.classList.add('active');
+        drawChart(currentSeed, currentUp, idx, unit);
+      };
+      modalTabs.appendChild(btn);
+    });
+    drawChart(currentSeed, currentUp, 2, unit);
+    modal.classList.add('open');
+  }
+  function closeChart(){ modal.classList.remove('open'); }
+
+  document.body.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-sym]');
+    if(!el) return;
+    if(e.target.closest('[data-remove]')) return;
+    openChart(el.getAttribute('data-sym'), el.getAttribute('data-name'), el.getAttribute('data-price'), el.getAttribute('data-change'), el.getAttribute('data-up')==='1');
+  });
+
+  modal.addEventListener('click', (e) => { if(e.target === modal) closeChart(); });
+</script>
+
+</body>
+</html>
