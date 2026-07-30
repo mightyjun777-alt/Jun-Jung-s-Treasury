@@ -1,0 +1,39 @@
+
+name: Update stock prices
+ 
+on:
+  schedule:
+    # Every 15 minutes, 11:00–23:45 UTC, Mon–Fri.
+    # That covers roughly 6am–6pm US Eastern (pre-market through after-hours),
+    # across both daylight-saving and standard time.
+    # Note: GitHub's scheduler is best-effort — runs can lag by several
+    # minutes during busy periods, so this is "close to real-time," not exact.
+    - cron: "*/15 11-23 * * 1-5"
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab
+ 
+permissions:
+  contents: write
+ 
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+ 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+ 
+      - name: Fetch latest prices
+        run: python scripts/update_prices.py
+ 
+      - name: Commit updated data.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git diff --quiet --cached || git commit -m "Auto-update stock prices"
+          git push
+ 
