@@ -160,5 +160,21 @@
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
-  }
+  },
+  "SPX": 6481.20,
+  "DJI": 44982.10,
+  "IXIC": 21340.55,
+  "RUT": 2318.40,
+  "VIX": 14.82,
+  "US10Y": 4.21,
+  "KRW": 1455.10,
+  "EURUSD": 1.0842,
+  "USDJPY": 152.30,
+  "DXY": 101.85,
+  "WTI": 71.20,
+  "BRENT": 74.85,
+  "GOLD": 3412.60,
+  "SILVER": 51.70,
+  "NATGAS": 3.28,
+  "COPPER": 4.62
 }
