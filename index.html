@@ -235,7 +235,7 @@
 
   <div class="topbar">
     <div class="topbar-brand">Jun's <span>Treasury</span></div>
-    <div class="topbar-meta">2026.07.29 (WED) · 뉴욕장 마감 기준</div>
+    <div class="topbar-meta" id="topbar-date">날짜 불러오는 중…</div>
   </div>
 
   <div class="masthead">
@@ -244,19 +244,8 @@
   </div>
 
   <div class="calendar-wrap">
-    <div class="calendar-label">7월 주요 일정 (클릭하면 상세 내용)</div>
-    <div class="cal-scroll">
-      <div class="cal-item" data-detail="d0"><div class="cal-date">7/22</div><div class="cal-desc">ServiceNow(NOW) 실적 발표완료</div><span class="cal-tag past">발표완료</span></div>
-      <div class="cal-item" data-detail="d1"><div class="cal-date">7/28-29</div><div class="cal-desc">FOMC 정례회의</div><span class="cal-tag fomc">FOMC</span></div>
-      <div class="cal-item today" data-detail="d2"><div class="cal-date">7/29 (오늘)</div><div class="cal-desc">FOMC 금리 결정 발표</div><span class="cal-tag fomc">FOMC</span></div>
-      <div class="cal-item" data-detail="d3"><div class="cal-date">7/30</div><div class="cal-desc">Pagaya(PGY) 2분기 실적</div><span class="cal-tag holding">관심종목</span></div>
-      <div class="cal-item" data-detail="d3b"><div class="cal-date">7/30</div><div class="cal-desc">Reddit(RDDT) 2분기 실적</div><span class="cal-tag holding">관심종목</span></div>
-      <div class="cal-item" data-detail="d4"><div class="cal-date">7/30</div><div class="cal-desc">Microsoft, Meta 실적</div><span class="cal-tag">빅테크</span></div>
-      <div class="cal-item" data-detail="d5"><div class="cal-date">7/31</div><div class="cal-desc">Apple, Amazon 실적</div><span class="cal-tag">빅테크</span></div>
-      <div class="cal-item" data-detail="d6"><div class="cal-date">8/1</div><div class="cal-desc">7월 고용지표 발표</div><span class="cal-tag">지표</span></div>
-      <div class="cal-item" data-detail="d7"><div class="cal-date">8/17</div><div class="cal-desc">Pagaya 정기 주주총회</div><span class="cal-tag holding">관심종목</span></div>
-      <div class="cal-item" data-detail="d8"><div class="cal-date">8/26</div><div class="cal-desc">Salesforce(CRM) 2분기 실적</div><span class="cal-tag holding">관심종목</span></div>
-    </div>
+    <div class="calendar-label" id="calendar-label">주요 일정 (클릭하면 상세 내용)</div>
+    <div class="cal-scroll" id="cal-scroll"></div>
     <div class="cal-detail" id="cal-detail-panel">
       <span class="cal-detail-close" onclick="closeDetail()">닫기 ✕</span>
       <div class="cal-detail-title" id="cal-detail-title"></div>
@@ -273,6 +262,7 @@
   <!-- 1. Macro -->
   <div class="section">
     <div class="section-head"><span class="section-num">01</span><h2 class="section-title">거시 환경</h2></div>
+    <div class="section-hint">⚠ 이 섹션의 해설 글은 아직 자동 갱신 전입니다 — 아래 날짜는 실제 최신이 아닐 수 있어요</div>
     <div class="macro-grid">
       <div class="macro-card"><div class="macro-card-label">금리 · 연준</div><div class="macro-card-body">7월 FOMC 결과 발표 임박. 9월 인하 기대감 유지, 최근 CPI는 예상치 부합.</div></div>
       <div class="macro-card"><div class="macro-card-label">환율 · 원자재</div><div class="macro-card-body">원/달러 1,455원 부근, 최근 1주 1,450~1,463원 박스권. WTI $71선 유지.</div></div>
@@ -348,13 +338,14 @@
       <div class="add-form-hint" id="add-form-hint">회사명을 입력하면 후보가 뜨고, 선택하면 티커·가격이 채워져요 (자주 검색되는 종목 기준 최근 가격). 목록에 없으면 티커·가격을 직접 입력하세요.</div>
     </div>
 
-    <div class="week-label" style="margin-top:26px;">종목별 브리핑</div>
+    <div class="week-label" style="margin-top:26px;">종목별 브리핑 <span style="font-weight:400;color:var(--sub);">(가격은 실시간 · 코멘트는 아직 수동)</span></div>
     <div class="holdings-grid" id="holdings-grid"></div>
   </div>
 
   <!-- 4. Outlook -->
   <div class="section">
     <div class="section-head"><span class="section-num">04</span><h2 class="section-title">전망 및 유의사항</h2></div>
+    <div class="section-hint">⚠ 아직 자동 갱신 전입니다</div>
     <div class="outlook-cols">
       <div class="outlook-col watch">
         <div class="outlook-col-label">기대해볼 만한 것</div>
@@ -378,6 +369,7 @@
   <!-- 5. Portfolio note -->
   <div class="section">
     <div class="section-head"><span class="section-num">05</span><h2 class="section-title">종합 포트폴리오 제언</h2></div>
+    <div class="section-hint">⚠ 아직 자동 갱신 전입니다</div>
     <div class="portfolio-note">
       <div class="portfolio-note-head">버핏·린치 관점 코멘트</div>
       <p><strong>버핏 관점:</strong> PGY의 단기 조정은 "가격이 아니라 가치가 훼손됐는가"를 먼저 봐야 할 사안. CRM처럼 연초 대비 낙폭이 과한 우량 SaaS 기업은 "훌륭한 기업을 적정 가격에" 매수할 기회일 수 있음.</p>
@@ -406,33 +398,71 @@
   </div>
 
 <script>
-  // ---- Calendar detail ----
-  const details = {
-    d0: { title: "ServiceNow(NOW) 2분기 실적 (발표완료)", body: "7월 22일 장 마감 후 발표. EPS $0.90으로 시장 예상치($0.76)를 큰 폭 상회했습니다. AI 제품(Now Assist, AI Control Tower) 채택 확대가 실적을 뒷받침했으나, 여전히 밸류에이션 부담(PER 60배 이상)이 남아있어 주가 반응은 제한적이었습니다." },
-    d1: { title: "FOMC 정례회의 (7/28-29)", body: "연준의 7월 정례 회의. 이틀간 진행되며 둘째 날(7/29) 오후 2시 ET에 금리 결정이 발표됩니다. 금리 동결이 유력하나, 성명서 문구 변화와 파월 의장 기자회견에서 9월 인하 가능성을 어떻게 시사하는지가 핵심 관전 포인트입니다." },
-    d2: { title: "FOMC 금리 결정 발표", body: "한국시간 오늘 밤(현지 7/29 오후 2시 ET) 기준금리 결정 발표. 이어서 오후 2시 30분 파월 의장 기자회견. 시장은 동결을 이미 반영하고 있어, 실제 변동성은 회견 발언에서 나올 가능성이 큽니다." },
-    d3: { title: "Pagaya(PGY) 2분기 실적", body: "7월 30일 장 시작 전 실적 발표, 같은 날 오전 8:30 ET 컨퍼런스 콜 예정. Blue Owl과의 forward flow 계약 갱신 여부와 ABS 발행 규모 추이가 핵심 체크포인트입니다." },
-    d3b: { title: "Reddit(RDDT) 2분기 실적", body: "7월 30일 장 마감 후 실적 발표, 오후 4:30 ET 컨퍼런스 콜 예정. 시장 컨센서스는 매출 약 $745M(전년比 +49%), EPS $0.99." },
-    d4: { title: "Microsoft · Meta 실적", body: "7월 30일 발표 예정. AI 인프라 투자(캐펙스) 가이던스 상향 여부가 반도체·클라우드 밸류체인 전반에 영향을 줄 수 있습니다." },
-    d5: { title: "Apple · Amazon 실적", body: "7월 31일 발표 예정. 소비자 지출 흐름과 클라우드(AWS) 성장률이 주요 관전 포인트입니다." },
-    d6: { title: "7월 비농업 고용지표", body: "8월 1일 발표. 고용 둔화 정도가 9월 FOMC의 인하 폭 전망에 직접적인 영향을 줄 수 있는 지표입니다." },
-    d7: { title: "Pagaya 정기 주주총회", body: "8월 17일 오후 5시(이스라엘 시간) 화상으로 진행." },
-    d8: { title: "Salesforce(CRM) 2분기 실적", body: "8월 26일 장 마감 후 발표 예정. Agentforce(AI 에이전트) 관련 매출 기여도와 구독 갱신율이 핵심 체크포인트입니다." },
-  };
-  const calItems = document.querySelectorAll('.cal-item');
+  // ---- Calendar: data-driven, auto-computes 지났음/오늘/예정 from real dates ----
+  const calendarEvents = [
+    { id: "d0", date: "2026-07-22", label: "ServiceNow(NOW) 2분기 실적", tagText: "실적", tagClass: "holding",
+      title: "ServiceNow(NOW) 2분기 실적", body: "7월 22일 장 마감 후 발표. EPS $0.90으로 시장 예상치($0.76)를 큰 폭 상회했습니다. AI 제품(Now Assist, AI Control Tower) 채택 확대가 실적을 뒷받침했으나, 여전히 밸류에이션 부담(PER 60배 이상)이 남아있어 주가 반응은 제한적이었습니다." },
+    { id: "d1", date: "2026-07-29", label: "FOMC 금리 결정 발표", tagText: "FOMC", tagClass: "fomc",
+      title: "FOMC 정례회의 · 금리 결정", body: "7월 정례 회의 둘째 날 — 현지시간 오후 2시 ET에 금리 결정, 2시 30분 파월 의장 기자회견. 성명서 문구와 9월 인하 시사 여부가 핵심 관전 포인트였습니다." },
+    { id: "d3", date: "2026-07-30", label: "Pagaya(PGY) 2분기 실적", tagText: "관심종목", tagClass: "holding",
+      title: "Pagaya(PGY) 2분기 실적", body: "장 시작 전 실적 발표, 같은 날 오전 8:30 ET 컨퍼런스 콜. Blue Owl과의 forward flow 계약 갱신 여부와 ABS 발행 규모 추이가 핵심 체크포인트입니다." },
+    { id: "d3b", date: "2026-07-30", label: "Reddit(RDDT) 2분기 실적", tagText: "관심종목", tagClass: "holding",
+      title: "Reddit(RDDT) 2분기 실적", body: "장 마감 후 실적 발표, 오후 4:30 ET 컨퍼런스 콜. 컨센서스 매출 약 $745M(전년比 +49%), EPS $0.99." },
+    { id: "d4", date: "2026-07-30", label: "Microsoft · Meta 실적", tagText: "빅테크", tagClass: "",
+      title: "Microsoft · Meta 실적", body: "AI 인프라 투자(캐펙스) 가이던스 상향 여부가 반도체·클라우드 밸류체인 전반에 영향을 줄 수 있습니다." },
+    { id: "d5", date: "2026-07-31", label: "Apple · Amazon 실적", tagText: "빅테크", tagClass: "",
+      title: "Apple · Amazon 실적", body: "소비자 지출 흐름과 클라우드(AWS) 성장률이 주요 관전 포인트입니다." },
+    { id: "d6", date: "2026-08-01", label: "7월 비농업 고용지표", tagText: "지표", tagClass: "",
+      title: "7월 비농업 고용지표", body: "고용 둔화 정도가 9월 FOMC의 인하 폭 전망에 직접적인 영향을 줄 수 있는 지표입니다." },
+    { id: "d7", date: "2026-08-17", label: "Pagaya 정기 주주총회", tagText: "관심종목", tagClass: "holding",
+      title: "Pagaya 정기 주주총회", body: "오후 5시(이스라엘 시간) 화상으로 진행 예정." },
+    { id: "d8", date: "2026-08-26", label: "Salesforce(CRM) 2분기 실적", tagText: "관심종목", tagClass: "holding",
+      title: "Salesforce(CRM) 2분기 실적", body: "장 마감 후 발표 예정. Agentforce(AI 에이전트) 관련 매출 기여도와 구독 갱신율이 핵심 체크포인트입니다." },
+  ];
+
+  const TODAY_STR = new Date().toISOString().slice(0,10); // YYYY-MM-DD, device's local date
+
+  function fmtCalDate(iso){
+    const d = new Date(iso + 'T00:00:00');
+    return (d.getMonth()+1) + '/' + d.getDate();
+  }
+
+  const calScroll = document.getElementById('cal-scroll');
   const calPanel = document.getElementById('cal-detail-panel');
-  calItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const d = details[item.getAttribute('data-detail')];
-      if (!d) return;
-      calItems.forEach(i => i.classList.remove('selected'));
-      item.classList.add('selected');
-      document.getElementById('cal-detail-title').textContent = d.title;
-      document.getElementById('cal-detail-body').textContent = d.body;
-      calPanel.classList.add('open');
+  let calItems = [];
+
+  function renderCalendar(){
+    calScroll.innerHTML = calendarEvents.map(ev => {
+      const isPast = ev.date < TODAY_STR;
+      const isToday = ev.date === TODAY_STR;
+      const statusClass = isToday ? 'today' : '';
+      const tagCls = isPast ? 'past' : ev.tagClass;
+      const tagLabel = isPast ? '완료' : ev.tagText;
+      const dateLabel = fmtCalDate(ev.date) + (isToday ? ' (오늘)' : '');
+      return `<div class="cal-item ${statusClass}" data-id="${ev.id}">
+        <div class="cal-date">${dateLabel}</div>
+        <div class="cal-desc">${ev.label}</div>
+        <span class="cal-tag ${tagCls}">${tagLabel}</span>
+      </div>`;
+    }).join('');
+    calItems = Array.from(calScroll.querySelectorAll('.cal-item'));
+    calItems.forEach((item, i) => {
+      item.addEventListener('click', () => {
+        const ev = calendarEvents[i];
+        calItems.forEach(it => it.classList.remove('selected'));
+        item.classList.add('selected');
+        document.getElementById('cal-detail-title').textContent = ev.title;
+        document.getElementById('cal-detail-body').textContent = ev.body;
+        calPanel.classList.add('open');
+      });
     });
-  });
+  }
+  renderCalendar();
   function closeDetail(){ calPanel.classList.remove('open'); calItems.forEach(i => i.classList.remove('selected')); }
+
+  // ---- Top date display ----
+  document.getElementById('topbar-date').textContent =
+    new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', weekday:'short' }) + ' · 최근 장 마감 기준';
 
   // ---- Holdings data: notes + persistence ----
   const notes = {
@@ -643,6 +673,46 @@
   // ---- Auto-load latest prices from data.json (updated by GitHub Actions) ----
   // Supports both the old flat format {"AAPL": 123.45} and the new
   // object format {"AAPL": {price, marketState, preMarketPrice, postMarketPrice}}.
+  const MACRO_FORMAT = {
+    SPX:'idx', DJI:'idx', IXIC:'idx', RUT:'idx',
+    VIX:'plain2', US10Y:'pct2',
+    KRW:'plain2', EURUSD:'fx4', USDJPY:'plain2', DXY:'plain2',
+    WTI:'usd2', BRENT:'usd2', GOLD:'usd2', SILVER:'usd2', NATGAS:'usd2', COPPER:'usd2',
+  };
+  function fmtMacroValue(sym, v){
+    const kind = MACRO_FORMAT[sym];
+    if(kind==='idx') return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    if(kind==='plain2') return v.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+    if(kind==='pct2') return v.toFixed(2) + '%';
+    if(kind==='fx4') return v.toFixed(4);
+    if(kind==='usd2') return '$' + v.toFixed(2);
+    return String(v);
+  }
+
+  function updateMacroTable(){
+    document.querySelectorAll('#macro-table tr[data-sym]').forEach(tr => {
+      const sym = tr.getAttribute('data-sym');
+      if(!liveData.hasOwnProperty(sym)) return;
+      const price = entryPrice(liveData[sym]);
+      const valStr = fmtMacroValue(sym, price);
+      const cells = tr.querySelectorAll('td');
+      const priceCell = cells[1];
+      const extLine = extendedHoursLine(sym);
+      priceCell.innerHTML = valStr + extLine;
+      priceCell.setAttribute('data-price', valStr);
+      tr.setAttribute('data-price', valStr);
+      const entry = liveData[sym];
+      if(entry && typeof entry === 'object' && entry.changePercent != null){
+        const up = entry.changePercent >= 0;
+        const changeCell = cells[2];
+        changeCell.textContent = (up?'+':'') + entry.changePercent.toFixed(2) + '%';
+        changeCell.className = up ? 'up' : 'down';
+        tr.setAttribute('data-change', changeCell.textContent);
+        tr.setAttribute('data-up', up?'1':'0');
+      }
+    });
+  }
+
   fetch('./data.json', {cache: 'no-store'})
     .then(res => res.ok ? res.json() : Promise.reject())
     .then(data => {
@@ -655,6 +725,7 @@
         }
       });
       if(changed){ saveHoldings(); renderHoldings(); }
+      updateMacroTable();
     })
     .catch(() => { /* data.json not present yet, or not reachable locally — silently keep static defaults */ });
 
