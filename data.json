@@ -150,31 +150,111 @@
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 64781.98,
+    "price": 64838.48,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 1921.66,
+    "price": 1925.29,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
-  "SPX": 6481.20,
-  "DJI": 44982.10,
-  "IXIC": 21340.55,
-  "RUT": 2318.40,
-  "VIX": 14.82,
-  "US10Y": 4.21,
-  "KRW": 1455.10,
-  "EURUSD": 1.0842,
-  "USDJPY": 152.30,
-  "DXY": 101.85,
-  "WTI": 71.20,
-  "BRENT": 74.85,
-  "GOLD": 3412.60,
-  "SILVER": 51.70,
-  "NATGAS": 3.28,
-  "COPPER": 4.62
+  "SPX": {
+    "price": 6481.2,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "DJI": {
+    "price": 44982.1,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "IXIC": {
+    "price": 21340.55,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "RUT": {
+    "price": 2318.4,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "VIX": {
+    "price": 14.82,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "US10Y": {
+    "price": 4.21,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "KRW": {
+    "price": 1455.1,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "EURUSD": {
+    "price": 1.0842,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "USDJPY": {
+    "price": 152.3,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "DXY": {
+    "price": 101.85,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "WTI": {
+    "price": 3.46,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "BRENT": {
+    "price": 74.85,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "GOLD": {
+    "price": 42.08,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "SILVER": {
+    "price": 51.7,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "NATGAS": {
+    "price": 3.28,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "COPPER": {
+    "price": 4.62,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  }
 }
