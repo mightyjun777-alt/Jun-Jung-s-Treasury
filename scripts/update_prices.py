@@ -1,6 +1,4 @@
 
-
-Update prices · PY
 """
 Fetches the latest price for each symbol in data.json from Yahoo Finance's
 public chart endpoint and overwrites data.json with the new values —
