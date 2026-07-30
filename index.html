@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -80,6 +81,7 @@
   .category-chips{display:flex;flex-wrap:wrap;gap:6px;}
   .category-chip{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--bg-alt);color:var(--ink);border:1px solid var(--line);}
   .listing-tag{font-size:10px;color:var(--sub);font-weight:400;margin-top:2px;white-space:nowrap;}
+  .ext-price{font-size:11px;color:var(--orange-dark);font-weight:600;margin-top:2px;}
 
   /* Markets table */
   .ticker-table{width:100%;border-collapse:collapse;font-size:13px;}
@@ -238,7 +240,7 @@
 
   <div class="masthead">
     <div class="masthead-title">Jun's Treasury</div>
-    <div class="masthead-sub">나만의 자산 창고, 매일 조금씩 쌓이는 꿈 — 매크로, 시장, 보유종목, 전망, 종합 제언</div>
+    <div class="masthead-sub">나만의 자산 창고, 매일 조금씩 쌓이는 꿈 — 매크로, 시장, 관심종목, 전망, 종합 제언</div>
   </div>
 
   <div class="calendar-wrap">
@@ -247,13 +249,13 @@
       <div class="cal-item" data-detail="d0"><div class="cal-date">7/22</div><div class="cal-desc">ServiceNow(NOW) 실적 발표완료</div><span class="cal-tag past">발표완료</span></div>
       <div class="cal-item" data-detail="d1"><div class="cal-date">7/28-29</div><div class="cal-desc">FOMC 정례회의</div><span class="cal-tag fomc">FOMC</span></div>
       <div class="cal-item today" data-detail="d2"><div class="cal-date">7/29 (오늘)</div><div class="cal-desc">FOMC 금리 결정 발표</div><span class="cal-tag fomc">FOMC</span></div>
-      <div class="cal-item" data-detail="d3"><div class="cal-date">7/30</div><div class="cal-desc">Pagaya(PGY) 2분기 실적</div><span class="cal-tag holding">보유종목</span></div>
-      <div class="cal-item" data-detail="d3b"><div class="cal-date">7/30</div><div class="cal-desc">Reddit(RDDT) 2분기 실적</div><span class="cal-tag holding">보유종목</span></div>
+      <div class="cal-item" data-detail="d3"><div class="cal-date">7/30</div><div class="cal-desc">Pagaya(PGY) 2분기 실적</div><span class="cal-tag holding">관심종목</span></div>
+      <div class="cal-item" data-detail="d3b"><div class="cal-date">7/30</div><div class="cal-desc">Reddit(RDDT) 2분기 실적</div><span class="cal-tag holding">관심종목</span></div>
       <div class="cal-item" data-detail="d4"><div class="cal-date">7/30</div><div class="cal-desc">Microsoft, Meta 실적</div><span class="cal-tag">빅테크</span></div>
       <div class="cal-item" data-detail="d5"><div class="cal-date">7/31</div><div class="cal-desc">Apple, Amazon 실적</div><span class="cal-tag">빅테크</span></div>
       <div class="cal-item" data-detail="d6"><div class="cal-date">8/1</div><div class="cal-desc">7월 고용지표 발표</div><span class="cal-tag">지표</span></div>
-      <div class="cal-item" data-detail="d7"><div class="cal-date">8/17</div><div class="cal-desc">Pagaya 정기 주주총회</div><span class="cal-tag holding">보유종목</span></div>
-      <div class="cal-item" data-detail="d8"><div class="cal-date">8/26</div><div class="cal-desc">Salesforce(CRM) 2분기 실적</div><span class="cal-tag holding">보유종목</span></div>
+      <div class="cal-item" data-detail="d7"><div class="cal-date">8/17</div><div class="cal-desc">Pagaya 정기 주주총회</div><span class="cal-tag holding">관심종목</span></div>
+      <div class="cal-item" data-detail="d8"><div class="cal-date">8/26</div><div class="cal-desc">Salesforce(CRM) 2분기 실적</div><span class="cal-tag holding">관심종목</span></div>
     </div>
     <div class="cal-detail" id="cal-detail-panel">
       <span class="cal-detail-close" onclick="closeDetail()">닫기 ✕</span>
@@ -316,11 +318,11 @@
 
   <!-- 3. Holdings -->
   <div class="section">
-    <div class="section-head"><span class="section-num">03</span><h2 class="section-title">보유 종목</h2></div>
-    <div class="section-hint">보유종목 전체 · 가격을 클릭하면 그래프, ✕를 클릭하면 삭제, 아래에서 종목 추가 (주식·코인 모두 가능)</div>
+    <div class="section-head"><span class="section-num">03</span><h2 class="section-title">관심 종목</h2></div>
+    <div class="section-hint">관심종목 전체 · 가격을 클릭하면 그래프, ✕를 클릭하면 삭제, 아래에서 종목 추가 (주식·코인 모두 가능)</div>
     <div class="reset-wrap">
       <button class="reset-btn" id="reset-btn">최신 가격으로 업데이트</button>
-      <span class="reset-hint">보유 종목 목록은 그대로 두고, 알려진 종목의 가격만 최신 값으로 갱신해요</span>
+      <span class="reset-hint">관심 종목 중 저희가 가격 정보를 갖고 있는 종목만 최신 값으로 갱신해요</span>
     </div>
 
     <table class="full-table" id="full-holdings">
@@ -584,6 +586,23 @@
   const fhBody = document.getElementById('full-holdings-body');
   const gridEl = document.getElementById('holdings-grid');
 
+  // liveData holds data.json contents once fetched (declared early so
+  // renderHoldings/extendedHoursLine can safely reference it before that fetch resolves)
+  let liveData = {};
+  function entryPrice(entry){ return typeof entry === 'number' ? entry : entry.price; }
+
+  function extendedHoursLine(sym){
+    const entry = liveData[sym];
+    if(!entry || typeof entry === 'number') return '';
+    if(entry.marketState === 'PRE' && entry.preMarketPrice != null){
+      return `<div class="ext-price">개장전 ${fmtUSD(entry.preMarketPrice)}</div>`;
+    }
+    if((entry.marketState === 'POST' || entry.marketState === 'CLOSED') && entry.postMarketPrice != null){
+      return `<div class="ext-price">시간외 ${fmtUSD(entry.postMarketPrice)}</div>`;
+    }
+    return '';
+  }
+
   function renderHoldings(){
     fhBody.innerHTML = '';
     gridEl.innerHTML = '';
@@ -592,12 +611,13 @@
       const priceStr = fmtUSD(h.price);
       const {change, up} = pseudoChange(h.sym);
       const priceTag = h.priceKind === 'live' ? '<span class="tag" style="margin-left:6px;">실시간</span>' : (h.priceKind === 'close' ? '<span class="tag" style="margin-left:6px;">종가</span>' : '');
+      const extLine = extendedHoursLine(h.sym);
 
       // table row
       const tr = document.createElement('tr');
       tr.innerHTML = `<td class="tkr clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${h.sym}${listingTag(h.sym)}</td>
         <td>${h.name}</td>
-        <td class="clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}${priceTag}</td>
+        <td class="clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}${priceTag}${extLine}</td>
         <td class="del-cell"><span class="del-btn" data-remove="${h.sym}">✕</span></td>`;
       fhBody.appendChild(tr);
 
@@ -609,7 +629,7 @@
         <div class="holding-top">
           <div><div class="holding-ticker">${h.sym}</div><div class="holding-name">${h.name}</div>${listingTag(h.sym)}</div>
           <div><div class="holding-price" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}</div>
-            <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div></div>
+            <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div>${extLine}</div>
         </div>
         <div class="holding-note">${notes[h.sym] || '관련 뉴스·공시 업데이트 예정.'}</div>
       `;
@@ -620,15 +640,34 @@
   }
   renderHoldings();
 
+  // ---- Auto-load latest prices from data.json (updated by GitHub Actions) ----
+  // Supports both the old flat format {"AAPL": 123.45} and the new
+  // object format {"AAPL": {price, marketState, preMarketPrice, postMarketPrice}}.
+  fetch('./data.json', {cache: 'no-store'})
+    .then(res => res.ok ? res.json() : Promise.reject())
+    .then(data => {
+      liveData = data || {};
+      let changed = false;
+      holdings.forEach(h => {
+        if(liveData.hasOwnProperty(h.sym)){
+          const p = entryPrice(liveData[h.sym]);
+          if(p !== h.price){ h.price = p; changed = true; }
+        }
+      });
+      if(changed){ saveHoldings(); renderHoldings(); }
+    })
+    .catch(() => { /* data.json not present yet, or not reachable locally — silently keep static defaults */ });
+
   document.getElementById('reset-btn').addEventListener('click', () => {
-    if(!window.confirm('현재 보유 종목 목록은 그대로 두고, 알려진 종목의 가격만 최신 값으로 업데이트합니다. 계속할까요?')) return;
-    // Build a symbol -> latest price lookup from both the default holdings list and the search dictionary
+    if(!window.confirm('관심 종목 중 가격 정보를 갖고 있는 종목만 최신 값으로 업데이트합니다. 계속할까요?')) return;
+    // Build a symbol -> latest price lookup: data.json (highest priority) > default holdings > search dictionary
     const priceBySymbol = {};
     defaultHoldings.forEach(h => { priceBySymbol[h.sym] = h.price; });
     for(const key in nameToSymbol){
       const [symbol, , price] = nameToSymbol[key];
       priceBySymbol[symbol] = price;
     }
+    for(const sym in liveData){ priceBySymbol[sym] = entryPrice(liveData[sym]); }
     let updated = 0, skipped = 0;
     holdings.forEach(h => {
       if(priceBySymbol.hasOwnProperty(h.sym)){
@@ -742,7 +781,7 @@
     const name = document.getElementById('add-name').value.trim() || sym;
     const price = parseFloat(document.getElementById('add-price').value) || 0;
     if(!sym) return;
-    if(holdings.some(h => h.sym === sym)){ alert('이미 보유 중인 종목입니다: ' + sym); return; }
+    if(holdings.some(h => h.sym === sym)){ alert('이미 관심 종목에 있어요: ' + sym); return; }
     holdings.push({sym, name, price});
     saveHoldings();
     renderHoldings();
