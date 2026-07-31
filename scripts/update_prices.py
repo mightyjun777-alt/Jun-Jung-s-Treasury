@@ -1,4 +1,5 @@
 
+Update prices · PY
 """
 Fetches the latest price for each symbol in data.json from Yahoo Finance's
 public chart endpoint and overwrites data.json with the new values —
@@ -92,7 +93,7 @@ def fetch_quote(sym):
     if lo_hi and not (lo_hi[0] <= price <= lo_hi[1]):
         raise ValueError(f"Price {price} for {sym} outside sane range {lo_hi} — likely bad data")
  
-    prev_close = meta.get("chartPreviousClose") or meta.get("previousClose")
+    prev_close = meta.get("previousClose") or meta.get("chartPreviousClose")
     change_pct = None
     if prev_close:
         change_pct = round((price / float(prev_close) - 1) * 100, 2)
@@ -146,3 +147,5 @@ def main():
 if __name__ == "__main__":
     main()
  
+
+
