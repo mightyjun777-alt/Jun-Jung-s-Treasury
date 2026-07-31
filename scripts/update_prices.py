@@ -65,34 +65,39 @@ def fetch_quote(sym):
     result = payload["chart"]["result"][0]
     meta = result["meta"]
  
+    # Pull the daily close series — this is the ground truth we trust for
+    # both the current price and yesterday's close. Meta fields like
+    # previousClose/chartPreviousClose proved unreliable (sometimes several
+    # sessions stale), so we no longer rely on them except as a last resort.
+    valid_closes = []
+    try:
+        raw_closes = result["indicators"]["quote"][0]["close"]
+        valid_closes = [c for c in raw_closes if c is not None]
+    except (KeyError, IndexError):
+        pass
+ 
     price = meta.get("regularMarketPrice")
- 
-    # Fallback: some quote types (indices, FX, futures) omit
-    # regularMarketPrice from meta. Use the most recent non-null close from
-    # the chart series instead.
-    if price is None:
-        try:
-            closes = result["indicators"]["quote"][0]["close"]
-            for c in reversed(closes):
-                if c is not None:
-                    price = c
-                    break
-        except (KeyError, IndexError):
-            pass
- 
+    if price is None and valid_closes:
+        price = valid_closes[-1]
     if price is None:
         price = meta.get("previousClose") or meta.get("chartPreviousClose")
- 
     if price is None:
         raise ValueError(f"No price field available for {sym} ({ysym})")
- 
     price = float(price)
  
     lo_hi = SANITY_RANGE.get(sym)
     if lo_hi and not (lo_hi[0] <= price <= lo_hi[1]):
         raise ValueError(f"Price {price} for {sym} outside sane range {lo_hi} — likely bad data")
  
-    prev_close = meta.get("previousClose") or meta.get("chartPreviousClose")
+    # Previous close: second-to-last daily close (the last one may be
+    # today's still-forming or final candle; the one before it is the
+    # most recent completed prior session).
+    prev_close = None
+    if len(valid_closes) >= 2:
+        prev_close = valid_closes[-2]
+    else:
+        prev_close = meta.get("previousClose") or meta.get("chartPreviousClose")
+ 
     change_pct = None
     if prev_close:
         change_pct = round((price / float(prev_close) - 1) * 100, 2)
