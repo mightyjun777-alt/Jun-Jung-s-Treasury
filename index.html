@@ -317,7 +317,7 @@
     </div>
 
     <table class="full-table" id="full-holdings">
-      <thead><tr><th>티커</th><th>종목명</th><th>현재가</th><th></th></tr></thead>
+      <thead><tr><th>티커</th><th>종목명</th><th>현재가</th><th>전일종가</th><th>등락</th><th></th></tr></thead>
       <tbody id="full-holdings-body"></tbody>
     </table>
 
@@ -533,7 +533,7 @@
   function pseudoChange(sym){
     const up = sym.charCodeAt(0)%2===0;
     const pct = (0.3+(sym.length%5)*0.4).toFixed(1);
-    return { change: (up?'+':'-')+pct+'%', up, prevClose: null };
+    return { change: (up?'+':'-')+pct+'%', up, prevClose: null, diff: null };
   }
 
   // Prefer the real changePercent from data.json (liveData); fall back to the
@@ -543,8 +543,9 @@
     if(entry && typeof entry === 'object' && entry.changePercent != null){
       const pct = entry.changePercent;
       const up = pct >= 0;
-      const prevClose = pct !== -100 ? price / (1 + pct/100) : null;
-      return { change: (up?'+':'') + pct.toFixed(2) + '%', up, prevClose };
+      const prevClose = price / (1 + pct/100);
+      const diff = price - prevClose;
+      return { change: (up?'+':'') + pct.toFixed(2) + '%', up, prevClose, diff };
     }
     return pseudoChange(sym);
   }
@@ -653,8 +654,12 @@
 
     holdings.forEach(h => {
       const priceStr = fmtUSD(h.price);
-      const {change, up, prevClose} = realOrPseudoChange(h.sym, h.price);
-      const prevCloseStr = prevClose != null ? fmtUSD(prevClose) : null;
+      const {change, up, prevClose, diff} = realOrPseudoChange(h.sym, h.price);
+      const prevCloseStr = prevClose != null ? fmtUSD(prevClose) : '—';
+      const diffStr = diff != null ? (up?'+':'-') + fmtUSD(Math.abs(diff)).replace('$','$') : null;
+      const changeCellHtml = diff != null
+        ? `<span class="${up?'up':'down'}">${diffStr} (${change})</span>`
+        : `<span class="${up?'up':'down'}">${change}</span>`;
       const priceTag = h.priceKind === 'live' ? '<span class="tag" style="margin-left:6px;">실시간</span>' : (h.priceKind === 'close' ? '<span class="tag" style="margin-left:6px;">종가</span>' : '');
       const extLine = extendedHoursLine(h.sym);
 
@@ -663,6 +668,8 @@
       tr.innerHTML = `<td class="tkr clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${h.sym}${listingTag(h.sym)}</td>
         <td>${h.name}</td>
         <td class="clickable-val" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}${priceTag}${extLine}</td>
+        <td>${prevCloseStr}</td>
+        <td>${changeCellHtml}</td>
         <td class="del-cell"><span class="del-btn" data-remove="${h.sym}">✕</span></td>`;
       fhBody.appendChild(tr);
 
@@ -674,8 +681,8 @@
         <div class="holding-top">
           <div><div class="holding-ticker">${h.sym}</div><div class="holding-name">${h.name}</div>${listingTag(h.sym)}</div>
           <div><div class="holding-price" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}</div>
-            <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div>${extLine}
-            ${prevCloseStr ? `<div class="prev-close">전일종가 ${prevCloseStr}</div>` : ''}
+            <div class="holding-change ${up?'up':'down'}">${diff!=null ? diffStr+' ' : ''}${change}${priceTag}</div>${extLine}
+            <div class="prev-close">전일종가 ${prevCloseStr}</div>
           </div>
         </div>
         <div class="holding-note">${notes[h.sym] || '관련 뉴스·공시 업데이트 예정.'}</div>
