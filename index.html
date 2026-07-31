@@ -117,6 +117,7 @@
   .holding-name{font-size:15px;font-weight:700;margin-top:1px;}
   .holding-price{font-size:14.5px;font-weight:700;text-align:right;cursor:pointer;}
   .holding-change{font-size:12px;text-align:right;}
+  .prev-close{font-size:10.5px;color:var(--sub);text-align:right;margin-top:2px;}
   .holding-note{margin-top:9px;font-size:12.5px;line-height:1.55;color:#333;}
   .holding-tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;}
   .tag{font-size:10.5px;padding:2px 8px;border:1px solid var(--line);border-radius:3px;color:var(--sub);}
@@ -312,7 +313,7 @@
     <div class="section-hint">관심종목 전체 · 가격을 클릭하면 그래프, ✕를 클릭하면 삭제, 아래에서 종목 추가 (주식·코인 모두 가능)</div>
     <div class="reset-wrap">
       <button class="reset-btn" id="reset-btn">최신 가격으로 업데이트</button>
-      <span class="reset-hint">관심 종목 중 저희가 가격 정보를 갖고 있는 종목만 최신 값으로 갱신해요</span>
+      <span class="reset-hint">앱을 열면 자동으로 최신 가격을 반영해요 — 이 버튼은 새로고침 없이 바로 다시 불러오고 싶을 때만 누르면 돼요</span>
     </div>
 
     <table class="full-table" id="full-holdings">
@@ -532,7 +533,20 @@
   function pseudoChange(sym){
     const up = sym.charCodeAt(0)%2===0;
     const pct = (0.3+(sym.length%5)*0.4).toFixed(1);
-    return { change: (up?'+':'-')+pct+'%', up };
+    return { change: (up?'+':'-')+pct+'%', up, prevClose: null };
+  }
+
+  // Prefer the real changePercent from data.json (liveData); fall back to the
+  // placeholder pseudo-change only when we have no live data for this symbol yet.
+  function realOrPseudoChange(sym, price){
+    const entry = liveData[sym];
+    if(entry && typeof entry === 'object' && entry.changePercent != null){
+      const pct = entry.changePercent;
+      const up = pct >= 0;
+      const prevClose = pct !== -100 ? price / (1 + pct/100) : null;
+      return { change: (up?'+':'') + pct.toFixed(2) + '%', up, prevClose };
+    }
+    return pseudoChange(sym);
   }
 
   function fmtUSD(n){ return '$' + n.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -639,7 +653,8 @@
 
     holdings.forEach(h => {
       const priceStr = fmtUSD(h.price);
-      const {change, up} = pseudoChange(h.sym);
+      const {change, up, prevClose} = realOrPseudoChange(h.sym, h.price);
+      const prevCloseStr = prevClose != null ? fmtUSD(prevClose) : null;
       const priceTag = h.priceKind === 'live' ? '<span class="tag" style="margin-left:6px;">실시간</span>' : (h.priceKind === 'close' ? '<span class="tag" style="margin-left:6px;">종가</span>' : '');
       const extLine = extendedHoursLine(h.sym);
 
@@ -659,7 +674,9 @@
         <div class="holding-top">
           <div><div class="holding-ticker">${h.sym}</div><div class="holding-name">${h.name}</div>${listingTag(h.sym)}</div>
           <div><div class="holding-price" data-sym="${h.sym}" data-name="${h.name}" data-price="${priceStr}" data-change="${change}" data-up="${up?1:0}">${priceStr}</div>
-            <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div>${extLine}</div>
+            <div class="holding-change ${up?'up':'down'}">${change}${priceTag}</div>${extLine}
+            ${prevCloseStr ? `<div class="prev-close">전일종가 ${prevCloseStr}</div>` : ''}
+          </div>
         </div>
         <div class="holding-note">${notes[h.sym] || '관련 뉴스·공시 업데이트 예정.'}</div>
       `;
@@ -724,7 +741,8 @@
           if(p !== h.price){ h.price = p; changed = true; }
         }
       });
-      if(changed){ saveHoldings(); renderHoldings(); }
+      if(changed){ saveHoldings(); }
+      renderHoldings();
       updateMacroTable();
     })
     .catch(() => { /* data.json not present yet, or not reachable locally — silently keep static defaults */ });
