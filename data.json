@@ -175,15 +175,15 @@
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 78206.53,
-    "changePercent": 7.08,
+    "price": 78439.88,
+    "changePercent": 7.4,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 2483.19,
-    "changePercent": 6.74,
+    "price": 2524.28,
+    "changePercent": 8.51,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
