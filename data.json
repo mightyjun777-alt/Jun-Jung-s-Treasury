@@ -175,14 +175,14 @@
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 78273.37,
-    "changePercent": -0.88,
+    "price": 78574.31,
+    "changePercent": -0.49,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 2441.39,
+    "price": 2441.5,
     "changePercent": -1.63,
     "marketState": null,
     "preMarketPrice": null,
@@ -231,71 +231,71 @@
     "postMarketPrice": null
   },
   "KRW": {
-    "price": 1381.87,
-    "changePercent": 0.08,
+    "price": 1382.21,
+    "changePercent": 0.11,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "EURUSD": {
-    "price": 1.168,
-    "changePercent": 0.1,
+    "price": 1.1678,
+    "changePercent": 0.08,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "USDJPY": {
-    "price": 159.2,
-    "changePercent": 0.04,
+    "price": 159.19,
+    "changePercent": 0.03,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "DXY": {
-    "price": 98.9,
-    "changePercent": -0.1,
+    "price": 98.91,
+    "changePercent": -0.09,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "WTI": {
-    "price": 80.76,
-    "changePercent": -5.0,
+    "price": 81.11,
+    "changePercent": -4.59,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "BRENT": {
-    "price": 85.54,
-    "changePercent": -7.19,
+    "price": 85.86,
+    "changePercent": -6.85,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "GOLD": {
-    "price": 4718.1,
-    "changePercent": 1.67,
+    "price": 4715.9,
+    "changePercent": 1.62,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "SILVER": {
-    "price": 68.82,
-    "changePercent": 0.41,
+    "price": 68.63,
+    "changePercent": 0.13,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "NATGAS": {
-    "price": 2.84,
-    "changePercent": 2.08,
+    "price": 2.85,
+    "changePercent": 2.26,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "COPPER": {
     "price": 6.71,
-    "changePercent": 1.68,
+    "changePercent": 1.7,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
