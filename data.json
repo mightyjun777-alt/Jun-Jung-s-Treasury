@@ -175,15 +175,15 @@
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 77323.77,
-    "changePercent": -3.66,
+    "price": 77687.91,
+    "changePercent": -3.2,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 2422.81,
-    "changePercent": -3.49,
+    "price": 2440.94,
+    "changePercent": -2.77,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
@@ -196,7 +196,7 @@
     "postMarketPrice": null
   },
   "DJI": {
-    "price": 53559.99,
+    "price": 53560.0,
     "changePercent": -0.02,
     "marketState": null,
     "preMarketPrice": null,
@@ -232,21 +232,21 @@
   },
   "KRW": {
     "price": 1375.67,
-    "changePercent": -0.57,
+    "changePercent": -0.35,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "EURUSD": {
     "price": 1.1587,
-    "changePercent": -0.58,
+    "changePercent": -0.6,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "USDJPY": {
     "price": 160.04,
-    "changePercent": 0.49,
+    "changePercent": 0.45,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
