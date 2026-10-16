@@ -1,301 +1,301 @@
 {
   "COHR": {
-    "price": 234.26,
-    "changePercent": -6.52,
+    "price": 232.9,
+    "changePercent": -7.06,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "CRM": {
-    "price": 240.37,
-    "changePercent": -2.58,
+    "price": 240.7,
+    "changePercent": -2.45,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "DECK": {
-    "price": 85.19,
-    "changePercent": -1.61,
+    "price": 85.71,
+    "changePercent": -1.0,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "GLW": {
-    "price": 133.17,
-    "changePercent": -3.8,
+    "price": 132.0,
+    "changePercent": -4.64,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "IONQ": {
-    "price": 31.4,
-    "changePercent": -8.58,
+    "price": 31.28,
+    "changePercent": -8.94,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "NOW": {
-    "price": 140.72,
-    "changePercent": -5.29,
+    "price": 141.97,
+    "changePercent": -4.44,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "NVO": {
-    "price": 38.73,
-    "changePercent": -1.25,
+    "price": 38.83,
+    "changePercent": -0.99,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "PL": {
-    "price": 13.41,
-    "changePercent": -7.74,
+    "price": 13.56,
+    "changePercent": -6.74,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "RDDT": {
-    "price": 153.9,
-    "changePercent": -3.43,
+    "price": 156.14,
+    "changePercent": -2.02,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ZETA": {
-    "price": 31.98,
-    "changePercent": -4.69,
+    "price": 31.81,
+    "changePercent": -5.19,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "AMZN": {
-    "price": 249.03,
-    "changePercent": -2.25,
+    "price": 250.0,
+    "changePercent": -1.87,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ASML": {
-    "price": 1651.28,
-    "changePercent": -0.37,
+    "price": 1641.52,
+    "changePercent": -0.96,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "IREN": {
-    "price": 26.97,
-    "changePercent": -11.25,
+    "price": 26.99,
+    "changePercent": -11.19,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "JEPQ": {
-    "price": 58.84,
-    "changePercent": -2.09,
+    "price": 58.81,
+    "changePercent": -2.15,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "META": {
-    "price": 706.12,
-    "changePercent": -4.15,
+    "price": 709.33,
+    "changePercent": -3.72,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "MRVL": {
-    "price": 229.6,
-    "changePercent": -4.83,
+    "price": 227.83,
+    "changePercent": -5.56,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "MU": {
-    "price": 889.98,
-    "changePercent": -4.43,
+    "price": 878.84,
+    "changePercent": -5.63,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "PGY": {
-    "price": 17.43,
-    "changePercent": -2.68,
+    "price": 17.23,
+    "changePercent": -3.8,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "SEZL": {
-    "price": 127.86,
-    "changePercent": -3.41,
+    "price": 127.65,
+    "changePercent": -3.57,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "TEM": {
-    "price": 65.28,
-    "changePercent": -8.22,
+    "price": 64.72,
+    "changePercent": -9.01,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "TSLA": {
-    "price": 351.06,
-    "changePercent": -3.14,
+    "price": 354.72,
+    "changePercent": -2.13,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "COPX": {
-    "price": 79.65,
-    "changePercent": -1.46,
+    "price": 79.98,
+    "changePercent": -1.05,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "SLV": {
-    "price": 51.47,
-    "changePercent": -0.87,
+    "price": 51.51,
+    "changePercent": -0.79,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "VOO": {
-    "price": 700.83,
-    "changePercent": -1.21,
+    "price": 701.61,
+    "changePercent": -1.1,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "AAPL": {
-    "price": 341.02,
-    "changePercent": -0.29,
+    "price": 343.46,
+    "changePercent": 0.43,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 81015.31,
-    "changePercent": -1.37,
+    "price": 81585.93,
+    "changePercent": -0.68,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 2404.71,
-    "changePercent": -1.47,
+    "price": 2413.37,
+    "changePercent": -1.11,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "SPX": {
-    "price": 7649.42,
-    "changePercent": -1.22,
+    "price": 7659.44,
+    "changePercent": -1.09,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "DJI": {
-    "price": 51908.93,
-    "changePercent": -0.52,
-    "marketState": null,
-    "preMarketPrice": null,
-    "postMarketPrice": null
-  },
-  "IXIC": {
-    "price": 26112.72,
-    "changePercent": -2.25,
-    "marketState": null,
-    "preMarketPrice": null,
-    "postMarketPrice": null
-  },
-  "RUT": {
-    "price": 2719.35,
-    "changePercent": -1.73,
-    "marketState": null,
-    "preMarketPrice": null,
-    "postMarketPrice": null
-  },
-  "VIX": {
-    "price": 21.38,
-    "changePercent": 29.89,
-    "marketState": null,
-    "preMarketPrice": null,
-    "postMarketPrice": null
-  },
-  "US10Y": {
-    "price": 5.11,
-    "changePercent": 0.41,
-    "marketState": null,
-    "preMarketPrice": null,
-    "postMarketPrice": null
-  },
-  "KRW": {
-    "price": 1334.8,
+    "price": 52002.41,
     "changePercent": -0.34,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
+  "IXIC": {
+    "price": 26140.03,
+    "changePercent": -2.15,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "RUT": {
+    "price": 2721.37,
+    "changePercent": -1.66,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "VIX": {
+    "price": 19.99,
+    "changePercent": 21.45,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "US10Y": {
+    "price": 5.1,
+    "changePercent": 0.18,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
+  "KRW": {
+    "price": 1334.2,
+    "changePercent": -0.5,
+    "marketState": null,
+    "preMarketPrice": null,
+    "postMarketPrice": null
+  },
   "EURUSD": {
-    "price": 1.1236,
-    "changePercent": 0.37,
+    "price": 1.1244,
+    "changePercent": 0.28,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "USDJPY": {
-    "price": 158.04,
-    "changePercent": 0.05,
+    "price": 157.99,
+    "changePercent": -0.1,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "DXY": {
-    "price": 101.84,
-    "changePercent": -0.15,
+    "price": 101.78,
+    "changePercent": -0.22,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "WTI": {
-    "price": 99.25,
-    "changePercent": 1.31,
+    "price": 99.04,
+    "changePercent": 1.09,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "BRENT": {
-    "price": 109.9,
-    "changePercent": 3.76,
+    "price": 109.69,
+    "changePercent": 3.56,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "GOLD": {
-    "price": 4178.4,
-    "changePercent": 0.2,
+    "price": 4186.7,
+    "changePercent": 0.4,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "SILVER": {
-    "price": 57.12,
-    "changePercent": 0.51,
+    "price": 57.13,
+    "changePercent": 0.52,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "NATGAS": {
     "price": 3.12,
-    "changePercent": -3.65,
+    "changePercent": -3.68,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "COPPER": {
     "price": 6.56,
-    "changePercent": 0.81,
+    "changePercent": 0.78,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
