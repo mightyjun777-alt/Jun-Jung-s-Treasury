@@ -29,14 +29,14 @@
   },
   "IONQ": {
     "price": 32.62,
-    "changePercent": 23.42,
+    "changePercent": 10.43,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "NOW": {
     "price": 101.97,
-    "changePercent": -0.38,
+    "changePercent": -6.29,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
@@ -50,21 +50,21 @@
   },
   "PL": {
     "price": 12.55,
-    "changePercent": 10.38,
+    "changePercent": -0.79,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "RDDT": {
     "price": 95.1,
-    "changePercent": 1.38,
+    "changePercent": -6.66,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ZETA": {
     "price": 31.03,
-    "changePercent": 5.29,
+    "changePercent": -2.36,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
@@ -85,21 +85,21 @@
   },
   "IREN": {
     "price": 21.64,
-    "changePercent": 20.02,
+    "changePercent": -0.32,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "JEPQ": {
     "price": 54.34,
-    "changePercent": 1.17,
+    "changePercent": -4.85,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "META": {
     "price": 610.15,
-    "changePercent": 0.84,
+    "changePercent": -3.15,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
@@ -120,21 +120,21 @@
   },
   "PGY": {
     "price": 17.5,
-    "changePercent": 0.52,
+    "changePercent": -8.47,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "SEZL": {
     "price": 149.43,
-    "changePercent": -3.59,
+    "changePercent": 9.32,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "TEM": {
     "price": 76.05,
-    "changePercent": 7.98,
+    "changePercent": 0.58,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
@@ -175,15 +175,15 @@
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 75914.05,
-    "changePercent": -0.04,
+    "price": 75939.78,
+    "changePercent": -0.0,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 2237.17,
-    "changePercent": 0.12,
+    "price": 2244.09,
+    "changePercent": 0.43,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
