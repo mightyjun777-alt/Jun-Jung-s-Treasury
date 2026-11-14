@@ -175,15 +175,15 @@
     "postMarketPrice": null
   },
   "BTC": {
-    "price": 68102.59,
-    "changePercent": -4.54,
+    "price": 66828.07,
+    "changePercent": -6.33,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
   },
   "ETH": {
-    "price": 1923.14,
-    "changePercent": -4.65,
+    "price": 1889.33,
+    "changePercent": -6.32,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
@@ -231,8 +231,8 @@
     "postMarketPrice": null
   },
   "KRW": {
-    "price": 1335.11,
-    "changePercent": -0.09,
+    "price": 1336.2,
+    "changePercent": 0.18,
     "marketState": null,
     "preMarketPrice": null,
     "postMarketPrice": null
